@@ -52,7 +52,7 @@ Properties {
     $chocoIncludePdb = $true
 
     # used nunit version
-    $nunitVersion = '3.12.0'
+    $nunitVersion = '3.11.1'
     $nUnitFramework = $null
 }
 
@@ -328,12 +328,10 @@ Task Clean -description 'Clean build output.' -depends ShowProperties {
     try
     {
         Chatter 'Cleaning solution' 2
-        Set-Location 'src'
         $solution = Get-Item '*.sln' | Select-Object -First 1
 
         # msbuild clean
         Invoke-MsBuild -targetFile $solution.Name -tasks @('Clean')
-        Set-Location '..'
 
         # clean up scratch folder
         Chatter 'Cleaning scratch' 2
@@ -361,7 +359,7 @@ Task ReSharperClean -description 'Clean ReSharper cache folders.' -depends ShowP
     try
     {
         # clean up cache folder
-        $path = Join-Path 'src' '_ReSharper.Caches'
+        $path = '_ReSharper.Caches'
         if (Test-Path $path) {
             Remove-Item -Path $path -Recurse -Force
         }
@@ -372,42 +370,15 @@ Task ReSharperClean -description 'Clean ReSharper cache folders.' -depends ShowP
     }
 }
 
-###############################################################################
-# Clean packages folder
-#
-# Depends on ReSharperClean to prevent cached references to removed packages.
-#
-Task PackageClean -description 'Clean NuGet packages folder.' -depends ReSharperClean {
-
-    Push-Location
-    try
-    {
-        # clean up packages folder
-        $path = Join-Path 'src' 'packages'
-        if (Test-Path $path) {
-            Remove-Item -Path $path -Recurse -Force
-        }
-    }
-    finally
-    {
-        Pop-Location
-    }
-}
-
-###############################################################################
-# Full clean
-#
-Task FullClean -description 'Clean build output, generated packages and NuGet packages folder.' -depends Clean,PackageClean
 
 ###############################################################################
 # Restore packages
 #
-Task PackageRestore -description 'Restore NuGet package dependencies.' -depends PackageClean {
+Task PackageRestore -description 'Restore NuGet package dependencies.' -depends ShowProperties {
 
     Push-Location
     try
     {
-        Set-Location 'src'
         $solution = Get-Item '*.sln' | Select-Object -First 1
 
         # traditional nuget command-line restore
@@ -443,7 +414,6 @@ Task Build -description 'Build the solution.' -depends Clean {
     Push-Location
     try
     {
-        Set-Location 'src'
         $solution = Get-Item '*.sln' | Select-Object -First 1
         Invoke-MsBuild -targetFile $solution.Name -tasks @('Restore', 'Build')
     }
@@ -463,70 +433,18 @@ Task FullBuild -description 'Do a full build starting from a clean solution.' -d
 #
 # Depends on Clean to ensure a clean build, not using any left-over compile artifacts.
 #
-Task Pack2017 -description 'Create a nuget-package (new project 2017 style).' -depends FullClean {
+Task Pack -description 'Create a nuget-package (new project 2017 style).' -depends Clean {
 
     Push-Location
     try
     {
-        Push-Location 'src'
-        try {
-            $solution = Get-Item '*.sln' | Select-Object -First 1
-            if ($solution) {
-                $additionalParameters = @(
-                    "/p:IncludeSymbols=True"
-                    "/p:IncludeSource=True"
-                )
-                Invoke-MsBuild -targetFile $solution.Name -tasks @('Restore','Pack') -additionalParameters $additionalParameters
-            }
-        }
-        finally {
-            Pop-Location
-        }
-    }
-    finally
-    {
-        Pop-Location
-    }
-}
-
-###############################################################################
-# Create a NuGet package (legacy project style)
-#
-# Depends on Clean to ensure a clean build, not using any left-over compile artifacts.
-#
-Task Pack -description 'Create a nuget-package (legacy project style).' -depends FullBuild {
-
-    Push-Location
-    try
-    {
-        $scratchDirectory = Get-Item -Path 'scratch'
-
-        Push-Location 'src'
-        try {
-            Chatter '  Searching nuspec files ...' 1
-            Get-ChildItem '*.nuspec' -Recurse | ForEach-Object {
-                $nuspecFile = $_
-
-                Chatter "  Found Searching $($nuspecFile.FullName)" 1
-
-                $csprojFile = Get-Item (Join-Path -Path $nuspecFile.Directory.FullName -ChildPath "$($nuspecFile.BaseName).csproj")
-                if ($csprojFile.Exists) {
-                    [System.IO.DirectoryInfo]$outputDirectory = Join-Path -Path $scratchDirectory.FullName -ChildPath 'nuget'
-
-                    if (-Not $outputDirectory.Exists) {
-                        $outputDirectory = New-Item -Path $outputDirectory.FullName -ItemType Directory
-                    }
-
-                    $nugetPackParams = @(
-                        """$($csprojFile.FullName)"""
-                        "-OutputDirectory ""$($outputDirectory.FullName)"""
-                    )
-                    Invoke-Nuget -task pack -additionalParameters $nugetPackParams -configuration $buildconfig
-                }
-            }
-        }
-        finally {
-            Pop-Location
+        $solution = Get-Item '*.sln' | Select-Object -First 1
+        if ($solution) {
+            $additionalParameters = @(
+                "/p:IncludeSymbols=True"
+                "/p:IncludeSource=True"
+            )
+            Invoke-MsBuild -targetFile $solution.Name -tasks @('Restore','Pack') -additionalParameters $additionalParameters
         }
     }
     finally
@@ -623,23 +541,6 @@ Task Test -description 'Run the unit tests using NUnit console test runner.' -de
 }
 
 ###############################################################################
-# WixInstaller, build each wixproj in our src directory
-#
-Task WixInstaller -description 'Do a full build starting from a clean solution and create all WixInstaller(s)' -depends FullBuild {
-
-    Push-Location
-    try
-    {
-        Get-ChildItem -Path 'src' -Filter '*.wixproj' -Recurse | ForEach-Object {
-            Invoke-MsBuild -targetFile $_.FullName -tasks @('Build')
-        }
-    }
-    finally {
-        Pop-Location
-    }
-}
-
-###############################################################################
 # Open, starting all *.sln files, inside .\src directory
 #
 Task Open -description 'starting all *.sln files, inside .\src directory' -depends Restore {
@@ -647,7 +548,7 @@ Task Open -description 'starting all *.sln files, inside .\src directory' -depen
     Push-Location
     try
     {
-        Get-ChildItem -Path 'src' -Filter '*.sln' -Recurse | ForEach-Object {
+        Get-ChildItem -Path '.' -Filter '*.sln' -Recurse | ForEach-Object {
             $solution = $_.FullName
             Chatter "start $solution" 2
             Invoke-Item $solution
@@ -657,209 +558,5 @@ Task Open -description 'starting all *.sln files, inside .\src directory' -depen
         Pop-Location
     }
 }
-
-###############################################################################
-# ChocoInstaller, build our choco-installer (portable version)
-#
-Task ChocoInstaller `
-    -description 'Do a full build starting from a clean solution and create our portable chocolatey-package' `
-    -depends FullBuild {
-
-    Push-Location
-    try
-    {
-        if ($env:ChocolateyInstall) {
-            # There should be 2 folder(s)
-            #  - choco-scripts, contains specific powershell chocolatey files (install, uninstall, ...)
-            #  - choco-nuspecs, contains all nupsec to build
-            if ((Test-Path -Path 'choco-scripts') -and (Test-Path -Path 'choco-nuspecs')) {
-                $chocoScripts = Get-item 'choco-scripts'
-                $chocoNuSpecs = Get-Item 'choco-nuspecs'
-                $chocoScratch = Join-Path -Path 'scratch' -ChildPath 'choco'
-                $chocoDestination = New-Item -ItemType Directory -Path $chocoScratch -Force
-
-                # copy content of our 2 choco folders to our scratch choco folder
-                Copy-item -Force "$($chocoScripts.FullName)\*" -Destination $chocoDestination.FullName -Exclude '.git'
-                Copy-item -Force "$($chocoNuSpecs.FullName)\*" -Destination $chocoDestination.FullName -Exclude '.git'
-
-                #search for a nuspec file
-                Get-ChildItem -Path $chocoDestination.FullName -Filter *.nuspec | ForEach-Object {
-                    $nuspecFile = $_
-                    Chatter "  Processing $($nuspecFile.Name)" 1
-
-                    # make a difference between Cli and website (by convention IIS)
-                    if ($nuspecFile.Name -match 'IIS') {
-                        Chatter "    Detected a web project, let's publish if we have the publish profile" 1
-                        $projectFolder = Join-path -Path 'src' -ChildPath $nuspecFile.BaseName
-
-                        if (Test-Path -Path $projectFolder) {
-                            $projectFolder = Get-Item -Path $projectFolder
-
-                            $projectFile =
-                                Get-ChildItem $projectFolder.FullName -Recurse -Filter *$($nuspecFile.BaseName).csproj `
-                                    | Select-Object -First 1
-                            $publishProfile =
-                                Join-Path -Path $projectFolder.FullName -ChildPath 'Properties' | `
-                                Join-Path -ChildPath 'PublishProfiles' | `
-                                Join-Path -ChildPath 'Publish-Scratch.pubxml'
-
-                            if ($projectFile -and $publishProfile) {
-                                $additionalParameters = @(
-                                    "/p:DeployOnBuild=True"
-                                    "/p:PublishProfile=""$publishProfile"""
-                                )
-                                Invoke-MsBuild -targetFile $projectFile.FullName -tasks @('Build') -platform 'AnyCPU' -additionalParameters $additionalParameters
-                            }
-                        }
-                    }
-
-                    # search for a folder, simular to our nuspec file
-                    $packageFolder= "$($nuspecFile.BaseName)-$buildconfig-$buildPlatformTarget"
-                    Chatter "  Searching for PackageFolder $packageFolder" 1
-                    $scratchBin = Join-Path -Path 'scratch' -ChildPath 'bin'
-                    $packageFolder = `
-                        Get-ChildItem $scratchBin.FullName -Recurse `
-                            | Where-Object {$_.PSIsContainer -eq $true -and $_.Name -match $packageFolder} `
-                            | Select-Object -First 1
-                    if ($packageFolder) {
-                        # search for a executable file, simular to our nuspec file
-                        Chatter "  Searching for *$($nuspecFile.BaseName).exe inside PackageFolder" 1
-                        $targetFileName = `
-                            Get-ChildItem $($packageFolder.FullName) -Recurse -Filter *$($nuspecFile.BaseName).exe `
-                                | Select-Object -First 1
-                        if (-Not $targetFileName) {
-                            Chatter "  Searching for *$($nuspecFile.BaseName).dll inside PackageFolder" 1
-                            $targetFileName = `
-                                Get-ChildItem $($packageFolder.FullName) -Recurse -Filter *$($nuspecFile.BaseName).dll `
-                                    | Select-Object -First 1
-                        }
-
-                        if ($targetFileName) {
-                            $targetVersionInfo = (Get-Item $targetFileName.FullName).VersionInfo
-                            $id = $targetVersionInfo.FileDescription
-                            $zipProg = Join-Path (Join-Path $env:ChocolateyInstall "tools") "7z.exe"
-                            $zipPackage = (Join-Path -Path $chocoDestination.FullName -ChildPath $id) + ".7z"
-
-                            $zipProgParams = @(
-                                "a '$zipPackage'"
-                                "$($packageFolder.FullName)\*"
-                                "-t7z -r -m0=BCJ2 -m1=LZMA2:d=1024m -aoa"
-                            )
-
-                            if ($chocoIncludeXmlFiles -eq $false) {
-                                $zipProgParams += "'-x!*.xml'"
-                            }
-
-                            if ($chocoIncludePdb -eq $false) {
-                                $zipProgParams += "'-x!*.pdb'"
-                            }
-
-                            Chatter "$zipProg $zipProgParams" 2
-                            Exec { Invoke-Expression "$zipProg $zipProgParams" } "7z not available or something went wrong"
-
-                            Push-Location $chocoDestination.FullName
-                            try {
-                                $version = $targetVersionInfo.ProductVersion
-                                $description = $targetVersionInfo.Comments
-                                $author = $targetVersionInfo.CompanyName
-                                $title = $targetVersionInfo.ProductName
-                                $copyright = $targetVersionInfo.LegalCopyright
-                                $zipPackage = $id
-
-                                $chocoPackParams = @(
-                                    "'$($nuspecFile.Name)'"
-                                    "--version '$version'"
-                                    "id='$id'"
-                                    "description='$description'"
-                                    "author='$author'"
-                                    "title='$title'"
-                                    "copyright='$copyright'"
-                                    "zipPackage='$zipPackage'"
-                                );
-                                Chatter "choco pack $chocoPackParams" 2
-                                Exec { Invoke-Expression "choco pack $chocoPackParams" } "choco pack went wrong"
-                            }
-                            finally {
-                                Pop-Location
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-    finally {
-        Pop-Location
-    }
-}
-
-###############################################################################
-# ChocoInstall, build our choco-installer (portable version) and install it
-#
-Task ChocoInstall `
-    -description 'Do a full build starting from a clean solution and create our portable chocolatey-package and install it (Requires Administrator rights)' `
-    -depends ChocoInstaller {
-
-    if (Test-Administrator) {
-        Push-Location
-        try
-        {
-            # choco should be installed
-            if ($env:ChocolateyInstall) {
-                $chocoDestination = Get-Item -Path (Join-Path "scratch" "choco")
-                Chatter $chocoDestination 2
-                Get-ChildItem $chocoDestination.FullName -Filter *.nuspec | ForEach-Object {
-                    $nuspecFile = $_
-                    Chatter "  Searching for *$($nuspecFile.BaseName).exe inside PackageFolder" 1
-                    $targetFileName = `
-                        Get-ChildItem $($packageFolder.FullName) -Recurse -Filter *$($nuspecFile.BaseName).exe `
-                            | Select-Object -First 1
-                    if (-Not $targetFileName) {
-                        Chatter "  Searching for *$($nuspecFile.BaseName).dll inside PackageFolder" 1
-                        $targetFileName = `
-                        Get-ChildItem $($packageFolder.FullName) -Recurse -Filter *$($nuspecFile.BaseName).dll `
-                            | Select-Object -First 1
-                    }
-
-                    if ($targetFileName) {
-                        $targetVersionInfo = (Get-Item $targetFileName.FullName).VersionInfo
-                        $id = $targetVersionInfo.FileDescription
-                        $version = $targetVersionInfo.ProductVersion
-                        $chocoInstallParams = @(
-                            "'$id'"
-                            "--version $version"
-                            "--source '$($chocoDestination.FullName)'"
-                            "-yes"
-                            "--side-by-side"
-                            "--params '/CONFIG:$buildConfig'"
-                        )
-                        Chatter "choco install $chocoInstallParams" 2
-                        Exec { Invoke-Expression "choco install $chocoInstallParams" } "choco install went wrong"
-                    }
-                }
-            }
-        }
-        finally {
-            Pop-Location
-        }
-    }
-    else {
-        Chatter "This taks is only available when running asn an administrator." 1
-    }
-}
-
-###############################################################################
-# Installers, build our choco-installer / dsc-installer / wix-installer / nuget packs
-#
-Task Installers `
-    -description 'Do a full build starting from a clean solution and create following packages if available: choco, dsc, wix, nuget' `
-    -depends ChocoInstaller,WixInstaller,Pack
-
-###############################################################################
-# Installers, build our choco-installer / dsc-installer / wix-installer / nuget packs
-#
-Task Installers2017 `
-    -description 'Do a full build starting from a clean solution and create following packages if available: choco, dsc, wix, nuget' `
-    -depends ChocoInstaller,WixInstaller,Pack2017
 
 #endregion

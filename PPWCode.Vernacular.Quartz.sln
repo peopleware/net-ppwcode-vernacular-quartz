@@ -21,6 +21,15 @@ ProjectSection(SolutionItems) = preProject
 	src\StyleCop-Tests.ruleset = src\StyleCop-Tests.ruleset
 EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PPWCode.Vernacular.Quartz.I", "src\PPWCode.Vernacular.Quartz.I\PPWCode.Vernacular.Quartz.I.csproj", "{BA858E68-E024-49D8-82EF-2F5425EC172D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{0B4EBC4D-C071-43CA-9E3B-F7EA18A4B351}"
+ProjectSection(SolutionItems) = preProject
+	LICENSE = LICENSE
+	NOTICE = NOTICE
+	README.md = README.md
+EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,5 +41,19 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BA858E68-E024-49D8-82EF-2F5425EC172D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA858E68-E024-49D8-82EF-2F5425EC172D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA858E68-E024-49D8-82EF-2F5425EC172D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{BA858E68-E024-49D8-82EF-2F5425EC172D}.Debug|x64.Build.0 = Debug|Any CPU
+		{BA858E68-E024-49D8-82EF-2F5425EC172D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BA858E68-E024-49D8-82EF-2F5425EC172D}.Debug|x86.Build.0 = Debug|Any CPU
+		{BA858E68-E024-49D8-82EF-2F5425EC172D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA858E68-E024-49D8-82EF-2F5425EC172D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA858E68-E024-49D8-82EF-2F5425EC172D}.Release|x64.ActiveCfg = Release|Any CPU
+		{BA858E68-E024-49D8-82EF-2F5425EC172D}.Release|x64.Build.0 = Release|Any CPU
+		{BA858E68-E024-49D8-82EF-2F5425EC172D}.Release|x86.ActiveCfg = Release|Any CPU
+		{BA858E68-E024-49D8-82EF-2F5425EC172D}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

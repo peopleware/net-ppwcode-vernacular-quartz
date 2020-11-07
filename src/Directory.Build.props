@@ -12,9 +12,6 @@
     <FileVersion>$(InformationalVersion)</FileVersion>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
 
-    <!-- target frameworks -->
-    <TargetFramework>netcoreapp3.1</TargetFramework>
-
     <!-- build paths -->
     <OutputPath>..\..\scratch\bin\$(MSBuildProjectName)-$(Configuration)-$(Platform)\</OutputPath>
     <IntermediateOutputPath>..\..\scratch\obj\$(MSBuildProjectName)-$(Configuration)-$(Platform)\</IntermediateOutputPath>
@@ -33,15 +30,15 @@
     <LangVersion>latest</LangVersion>
 
     <!-- nuget package -->
-    <Description>The PPWCode Vernacular Quartz library version I</Description>
     <Product>PPWCode</Product>
+    <Description>The PPWCode Vernacular Quartz library version I</Description>
     <Authors>dvdwouwe;rvdginste</Authors>
     <Company>Peopleware NV</Company>
     <Copyright>Copyright © Peopleware NV 2020</Copyright>
 
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/peopleware/net-ppwcode-vernacular-quartz.git</RepositoryUrl>
-    <PackageTags>ppwcode vernacular quartz</PackageTags>
+    <PackageTags>ppwcode vernacular quartz scheduler</PackageTags>
     <PackageProjectUrl>https://github.com/peopleware/net-ppwcode-vernacular-quartz</PackageProjectUrl>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>

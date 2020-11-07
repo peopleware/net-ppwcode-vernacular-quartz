@@ -7,7 +7,11 @@ This library is part of the PPWCode project and defines the semantic vernacular.
 
 ### PPWCode.Vernacular.Quartz I
 
-This is version I of the library, which is designed to work with Microsoft .NET 4.8.
+This is version I of the library, which is designed to work with .NET Standard 2.0 API.
+
+A more specific build is also done for following runtimes: 
+* Microsoft .NET 4.8
+* Microsoft .NET Core 3.1
 
 The library is available as the [NuGet] package `PPWCode.Vernacular.Quartz.I`
 in the [NuGet Gallery].  It can be installed using the Nuget package manager from 
