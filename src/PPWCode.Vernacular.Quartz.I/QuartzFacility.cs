@@ -340,7 +340,7 @@ namespace PPWCode.Vernacular.Quartz.I
 
         [NotNull]
         protected virtual IDictionary<string, string> ConvertToDictionary(
-            [CanBeNull] NameValueCollection nameValueCollection)
+            [CanBeNull] [ItemNotNull] NameValueCollection nameValueCollection)
         {
             IDictionary<string, string> result = new Dictionary<string, string>();
             if (nameValueCollection != null)
