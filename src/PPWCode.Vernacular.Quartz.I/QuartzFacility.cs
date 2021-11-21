@@ -418,6 +418,7 @@ namespace PPWCode.Vernacular.Quartz.I
             }
         }
 
+        [UsedImplicitly]
         public class AdditionalScheduler
         {
             public AdditionalScheduler(
