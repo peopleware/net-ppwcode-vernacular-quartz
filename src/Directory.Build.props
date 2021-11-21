@@ -48,6 +48,7 @@
       <![CDATA[
 1.0.0 Initial release
 1.1.0 Better DI integration
+2.0.0 Improved exception handling
       ]]>
     </PackageReleaseNotes>
 
