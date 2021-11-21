@@ -345,7 +345,7 @@ namespace PPWCode.Vernacular.Quartz.I
             IDictionary<string, string> result = new Dictionary<string, string>();
             if (nameValueCollection != null)
             {
-                foreach (string key in nameValueCollection.AllKeys)
+                foreach (string key in nameValueCollection.AllKeys.Where(k => k != null))
                 {
                     result[key] = nameValueCollection[key];
                 }
