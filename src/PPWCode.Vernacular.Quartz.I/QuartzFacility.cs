@@ -127,7 +127,7 @@ namespace PPWCode.Vernacular.Quartz.I
                     LifestyleType.Singleton,
                     r =>
                     {
-                        r.Forward<IScheduler>();
+                        r.Forward<IQuartzScheduler, IScheduler>();
                         r.OnCreate(s => ((IQuartzScheduler)s).WaitForJobsToCompleteAtShutdown = additionalScheduler.WaitForJobsToCompleteAtShutdown);
                     });
                 if (additionalScheduler.StartScheduler)
