@@ -13,10 +13,10 @@
 
   <ItemGroup>
     <!-- Quartz -->
-    <PackageReference Include="Quartz" Version="3.2.4" />
-    <PackageReference Include="Quartz.Jobs" Version="3.2.4" />
-    <PackageReference Include="Quartz.Plugins" Version="3.2.4" />
-    <PackageReference Include="Quartz.Serialization.Json" Version="3.2.4" />
+    <PackageReference Include="Quartz" Version="3.3.3" />
+    <PackageReference Include="Quartz.Jobs" Version="3.3.3" />
+    <PackageReference Include="Quartz.Plugins" Version="3.3.3" />
+    <PackageReference Include="Quartz.Serialization.Json" Version="3.3.3" />
 
     <!-- Castle Windsor / Common Logging -->
     <PackageReference Include="Castle.Windsor" Version="5.1.1" />
