@@ -9,7 +9,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.Collections.Specialized;
+using System.Linq;
+
+using Castle.MicroKernel;
+using Castle.MicroKernel.Context;
 
 using JetBrains.Annotations;
 
@@ -25,6 +30,13 @@ namespace PPWCode.Vernacular.Quartz.I
     {
         private bool _isInitialized;
 
+        public QuartzSchedulerFactory([NotNull] IKernel kernel)
+        {
+            Kernel = kernel;
+        }
+
+        public IKernel Kernel { get; }
+
         /// <inheritdoc cref="IQuartzSchedulerFactory.Initialize" />
         public override void Initialize(NameValueCollection props)
         {
@@ -34,5 +46,38 @@ namespace PPWCode.Vernacular.Quartz.I
                 _isInitialized = true;
             }
         }
+
+        /// <inheritdoc />
+        [NotNull]
+        protected override TService InstantiateType<TService>(Type componentType)
+        {
+            TService instance;
+
+            IHandler handler = FindComponentHandler<TService>(componentType);
+            if ((handler == null) || (componentType == null))
+            {
+                instance = base.InstantiateType<TService>(componentType);
+            }
+            else
+            {
+                CreationContext creationContext =
+                    new CreationContext(
+                        handler,
+                        Kernel.ReleasePolicy,
+                        typeof(TService),
+                        null,
+                        null,
+                        null);
+                instance = (TService)handler.Resolve(creationContext);
+            }
+
+            return instance;
+        }
+
+        [CanBeNull]
+        protected virtual IHandler FindComponentHandler<TService>(Type componentType)
+            => Kernel
+                .GetHandlers(typeof(TService))
+                .SingleOrDefault(h => h.ComponentModel.Implementation == componentType);
     }
 }

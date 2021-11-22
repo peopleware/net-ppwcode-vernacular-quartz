@@ -58,15 +58,29 @@ namespace PPWCode.Vernacular.Quartz.I
             JobFactory = jobFactory;
         }
 
+        ~QuartzScheduler()
+        {
+            Dispose(false);
+        }
+
         /// <summary>
         ///     Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
         /// <inheritdoc />
         public void Dispose()
         {
-            _log.Info("Dispose is started...");
-            Stop();
-            _log.Info("Successfully disposed.");
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _log.Info("Dispose is started...");
+                Stop();
+                _log.Info("Successfully disposed.");
+            }
         }
 
         /// <summary>

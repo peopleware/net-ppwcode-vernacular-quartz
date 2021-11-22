@@ -127,7 +127,7 @@ namespace PPWCode.Vernacular.Quartz.I
                     LifestyleType.Singleton,
                     r =>
                     {
-                        r.Forward<IScheduler>();
+                        r.Forward<IQuartzScheduler, IScheduler>();
                         r.OnCreate(s => ((IQuartzScheduler)s).WaitForJobsToCompleteAtShutdown = additionalScheduler.WaitForJobsToCompleteAtShutdown);
                     });
                 if (additionalScheduler.StartScheduler)
@@ -340,12 +340,12 @@ namespace PPWCode.Vernacular.Quartz.I
 
         [NotNull]
         protected virtual IDictionary<string, string> ConvertToDictionary(
-            [CanBeNull] NameValueCollection nameValueCollection)
+            [CanBeNull] [ItemNotNull] NameValueCollection nameValueCollection)
         {
             IDictionary<string, string> result = new Dictionary<string, string>();
             if (nameValueCollection != null)
             {
-                foreach (string key in nameValueCollection.AllKeys)
+                foreach (string key in nameValueCollection.AllKeys.Where(k => k != null))
                 {
                     result[key] = nameValueCollection[key];
                 }
@@ -418,6 +418,7 @@ namespace PPWCode.Vernacular.Quartz.I
             }
         }
 
+        [UsedImplicitly]
         public class AdditionalScheduler
         {
             public AdditionalScheduler(
