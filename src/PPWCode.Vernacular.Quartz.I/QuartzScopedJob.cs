@@ -1,4 +1,4 @@
-﻿// Copyright 2020 by PeopleWare n.v..
+﻿// Copyright 2022 by PeopleWare n.v..
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -123,20 +123,22 @@ namespace PPWCode.Vernacular.Quartz.I
         }
 
         /// <inheritdoc />
-        [NotNull]
-        public virtual async Task Execute([NotNull] IJobExecutionContext context)
+        public virtual Task Execute(IJobExecutionContext context)
         {
             CheckDisposed();
             TrySetResolvingScope();
             _cancellationToken = context.CancellationToken;
 
-            await TimeAsync(
-                    new QuartzJobExecutionContext(context),
-                    executionContext => ExecuteBodyAsync(executionContext.JobExecutionContext))
-                .ConfigureAwait(false);
+            QuartzJobExecutionContext quartzJobExecutionContext = new QuartzJobExecutionContext(context);
+
+            Task ExecuteBody(QuartzJobExecutionContext executionContext)
+                => ExecuteBodyAsync(executionContext.JobExecutionContext);
+
+            return TimeAsync(quartzJobExecutionContext, ExecuteBody);
         }
 
-        protected async Task ExecuteBodyAsync([NotNull] IJobExecutionContext context)
+        [NotNull]
+        protected virtual async Task ExecuteBodyAsync([NotNull] IJobExecutionContext context)
         {
             try
             {
@@ -145,56 +147,16 @@ namespace PPWCode.Vernacular.Quartz.I
                 context.CancellationToken.ThrowIfCancellationRequested();
                 await OnExecuteAsync(context).ConfigureAwait(false);
                 context.CancellationToken.ThrowIfCancellationRequested();
-                await OnPostExecuteAsync(context, null).ConfigureAwait(false);
+                await OnPostExecuteAsync(context).ConfigureAwait(false);
                 context.CancellationToken.ThrowIfCancellationRequested();
-            }
-            catch (OperationCanceledException oce)
-            {
-                await OnPostExecuteAsync(context, oce).ConfigureAwait(false);
-
-                string msg = $"Re-wrapping {oce.GetType().FullName} to a JobExecutionException.";
-                Logger.Error(msg);
-                JobExecutionException jobExecutionException =
-                    new JobExecutionException(msg, oce, false)
-                    {
-                        UnscheduleAllTriggers = UnscheduleAllTriggers,
-                        UnscheduleFiringTrigger = UnscheduleFiringTrigger
-                    };
-                throw jobExecutionException;
-            }
-            catch (ProgrammingError pe)
-            {
-                await OnPostExecuteAsync(context, pe).ConfigureAwait(false);
-
-                string msg = $"Re-wrapping {pe.GetType().FullName} to a JobExecutionException.";
-                Logger.Error(msg);
-                JobExecutionException jobExecutionException =
-                    new JobExecutionException(msg, pe, false)
-                    {
-                        UnscheduleAllTriggers = true,
-                        UnscheduleFiringTrigger = true
-                    };
-                throw jobExecutionException;
-            }
-            catch (JobExecutionException e)
-            {
-                await OnPostExecuteAsync(context, e).ConfigureAwait(false);
-
-                throw;
             }
             catch (Exception e)
             {
-                await OnPostExecuteAsync(context, e).ConfigureAwait(false);
-
-                string msg = $"Re-wrapping {e.GetType().FullName} to a JobExecutionException.";
-                Logger.Error(msg);
-                JobExecutionException jobExecutionException =
-                    new JobExecutionException(msg, e, RefireImmediately)
-                    {
-                        UnscheduleAllTriggers = UnscheduleAllTriggers,
-                        UnscheduleFiringTrigger = UnscheduleFiringTrigger
-                    };
-                throw jobExecutionException;
+                bool rethrow = await OnExceptionAsync(context, e).ConfigureAwait(false);
+                if (rethrow)
+                {
+                    throw;
+                }
             }
         }
 
@@ -217,6 +179,7 @@ namespace PPWCode.Vernacular.Quartz.I
             }
         }
 
+        [NotNull]
         protected virtual async Task TimeAsync<TQuartzJobExecutionContext>(
             [NotNull] TQuartzJobExecutionContext quartzJobExecutionContext,
             [NotNull] Func<TQuartzJobExecutionContext, Task> lambda)
@@ -230,34 +193,7 @@ namespace PPWCode.Vernacular.Quartz.I
                 {
                     if (Logger.IsInfoEnabled)
                     {
-                        StringBuilder sb =
-                            new StringBuilder()
-                                .AppendLine()
-                                .AppendLine($"Executing job {context.JobInstance.GetType().FullName}")
-                                .AppendLine($"  Scheduler                    : {context.Scheduler.SchedulerName}")
-                                .AppendLine($"  Key                          : {context.JobDetail.Key.Name}.{context.JobDetail.Key.Group}")
-                                .AppendLine($"  Description                  : {context.JobDetail.Description}")
-                                .AppendLine($"  Durable                      : {context.JobDetail.Durable}")
-                                .AppendLine($"  RequestsRecovery             : {context.JobDetail.RequestsRecovery}")
-                                .AppendLine($"  ConcurrentExecutionDisallowed: {context.JobDetail.ConcurrentExecutionDisallowed}")
-                                .AppendLine($"  PersistJobDataAfterExecution : {context.JobDetail.PersistJobDataAfterExecution}")
-                                .AppendLine("  Parameters");
-                        foreach (KeyValuePair<string, object> pair in context.MergedJobDataMap)
-                        {
-                            string s;
-                            try
-                            {
-                                s = Convert.ToString(pair.Value);
-                            }
-                            catch
-                            {
-                                s = "<object>";
-                            }
-
-                            sb.AppendLine($"    {pair.Key}: [{s}]");
-                        }
-
-                        Logger.Info(sb.ToString());
+                        Logger.Info(GatherJobInformation(context).ToString());
                     }
 
                     await lambda(quartzJobExecutionContext).ConfigureAwait(false);
@@ -284,7 +220,69 @@ namespace PPWCode.Vernacular.Quartz.I
         protected abstract Task OnPreExecuteAsync([NotNull] IJobExecutionContext context);
 
         [NotNull]
-        protected abstract Task OnPostExecuteAsync([NotNull] IJobExecutionContext context, [CanBeNull] Exception e);
+        protected abstract Task OnPostExecuteAsync([NotNull] IJobExecutionContext context);
+
+        [NotNull]
+        protected virtual Task<bool> OnExceptionAsync(
+            [NotNull] IJobExecutionContext context,
+            [NotNull] Exception exception)
+        {
+            if (exception is JobExecutionException)
+            {
+                return Task.FromResult(true);
+            }
+
+            string msg = $"Re-wrapping {exception.GetType().FullName} to a JobExecutionException.";
+            Logger.Error(msg);
+            JobExecutionException jobExecutionException =
+                new JobExecutionException(msg, exception, RefireImmediately)
+                {
+                    UnscheduleAllTriggers = UnscheduleAllTriggers,
+                    UnscheduleFiringTrigger = UnscheduleFiringTrigger,
+                };
+            throw jobExecutionException;
+        }
+
+        [NotNull]
+        protected virtual StringBuilder GatherJobInformation([NotNull] IJobExecutionContext context)
+        {
+            StringBuilder sb = new StringBuilder();
+            try
+            {
+                sb
+                    .AppendLine()
+                    .AppendLine($"Executing job {context.JobInstance.GetType().FullName}")
+                    .AppendLine($"  Scheduler                    : {context.Scheduler.SchedulerName}")
+                    .AppendLine($"  Key                          : {context.JobDetail.Key.Name}.{context.JobDetail.Key.Group}")
+                    .AppendLine($"  JobType                      : {context.JobDetail.JobType.FullName}")
+                    .AppendLine($"  Description                  : {context.JobDetail.Description}")
+                    .AppendLine($"  Durable                      : {context.JobDetail.Durable}")
+                    .AppendLine($"  RequestsRecovery             : {context.JobDetail.RequestsRecovery}")
+                    .AppendLine($"  ConcurrentExecutionDisallowed: {context.JobDetail.ConcurrentExecutionDisallowed}")
+                    .AppendLine($"  PersistJobDataAfterExecution : {context.JobDetail.PersistJobDataAfterExecution}")
+                    .AppendLine("  Parameters");
+                foreach (KeyValuePair<string, object> pair in context.MergedJobDataMap)
+                {
+                    string s;
+                    try
+                    {
+                        s = Convert.ToString(pair.Value);
+                    }
+                    catch
+                    {
+                        s = "<object>";
+                    }
+
+                    sb.AppendLine($"    {pair.Key}: [{s}]");
+                }
+            }
+            catch (Exception e)
+            {
+                sb.Append($"Exception occured while gathering job information {e}");
+            }
+
+            return sb;
+        }
 
         protected virtual void OnReleaseUnmanagedResources()
         {
