@@ -1,4 +1,4 @@
-﻿// Copyright 2020 by PeopleWare n.v..
+﻿// Copyright 2022 by PeopleWare n.v..
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -107,6 +107,11 @@ namespace PPWCode.Vernacular.Quartz.I
                     r =>
                     {
                         r.Forward<ISchedulerFactory>();
+                        foreach (Type forward in additionalScheduler.SchedulerFactoryForwards)
+                        {
+                            r.Forward(forward);
+                        }
+
                         r.OnCreate(
                             s =>
                             {
@@ -128,6 +133,11 @@ namespace PPWCode.Vernacular.Quartz.I
                     r =>
                     {
                         r.Forward<IQuartzScheduler, IScheduler>();
+                        foreach (Type forward in additionalScheduler.SchedulerForwards)
+                        {
+                            r.Forward(forward);
+                        }
+
                         r.OnCreate(s => ((IQuartzScheduler)s).WaitForJobsToCompleteAtShutdown = additionalScheduler.WaitForJobsToCompleteAtShutdown);
                     });
                 if (additionalScheduler.StartScheduler)
@@ -429,7 +439,9 @@ namespace PPWCode.Vernacular.Quartz.I
                 [NotNull] Type schedulerServiceType,
                 [NotNull] Type schedulerComponentType,
                 bool waitForJobsToCompleteAtShutdown,
-                bool startScheduler)
+                bool startScheduler,
+                [CanBeNull] [ItemNotNull] IEnumerable<Type> schedulerFactoryForwards = null,
+                [CanBeNull] [ItemNotNull] IEnumerable<Type> schedulerForwards = null)
             {
                 SectionName = sectionName;
                 Properties = properties;
@@ -459,6 +471,14 @@ namespace PPWCode.Vernacular.Quartz.I
 
                 WaitForJobsToCompleteAtShutdown = waitForJobsToCompleteAtShutdown;
                 StartScheduler = startScheduler;
+                SchedulerFactoryForwards =
+                    schedulerFactoryForwards == null
+                        ? Array.Empty<Type>()
+                        : schedulerFactoryForwards.ToArray();
+                SchedulerForwards =
+                    schedulerForwards == null
+                        ? Array.Empty<Type>()
+                        : schedulerForwards.ToArray();
             }
 
             [CanBeNull]
@@ -482,6 +502,14 @@ namespace PPWCode.Vernacular.Quartz.I
             public bool WaitForJobsToCompleteAtShutdown { get; }
 
             public bool StartScheduler { get; }
+
+            [NotNull]
+            [ItemNotNull]
+            public Type[] SchedulerFactoryForwards { get; }
+
+            [NotNull]
+            [ItemNotNull]
+            public Type[] SchedulerForwards { get; }
         }
     }
 }
