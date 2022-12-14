@@ -49,6 +49,13 @@
 1.0.0 Initial release
 1.1.0 Better DI integration
 2.0.0 Improved exception handling
+3.0.0
+ * Upgrade System.Data.SqlClient from 4.8.3 -> 4.8.5 (CVE-2022-41064)
+ * Improve QuartzScheduler
+ ** make dependencies public
+ ** make most of the methods virtual
+ * Improve QuartzFacility
+ ** Possibility to add additional forwarded types for scheduler / scheduler-factory components
       ]]>
     </PackageReleaseNotes>
 
@@ -90,7 +97,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="JetBrains.Annotations" Version="2022.1.0" PrivateAssets="all" />
+    <PackageReference Include="JetBrains.Annotations" Version="2022.3.1" PrivateAssets="all" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118" PrivateAssets="all" IncludeAssets="runtime; build; native; contentfiles; analyzers" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="all" />
   </ItemGroup>

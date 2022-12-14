@@ -30,17 +30,10 @@
   <Choose>
     <When Condition=" '$(TargetFramework)' == 'netstandard20' Or '$(TargetFramework)' == 'netcoreapp3.1' Or '$(TargetFramework)' == 'net5.0'">
       <ItemGroup>
-        <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
+        <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
         <PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.1" />
       </ItemGroup>
     </When>
   </Choose>
-
-  <ItemGroup>
-    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
 
 </Project>

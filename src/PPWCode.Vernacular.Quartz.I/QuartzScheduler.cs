@@ -38,7 +38,6 @@ namespace PPWCode.Vernacular.Quartz.I
           IDisposable
     {
         private readonly ILog _log = LogManager.GetLogger(typeof(QuartzScheduler));
-        private readonly IScheduler _scheduler;
 
         /// <summary>
         ///     Constructs a Scheduler that uses Castle Windsor
@@ -54,9 +53,11 @@ namespace PPWCode.Vernacular.Quartz.I
             ISchedulerFactory schedulerFactory,
             IJobFactory jobFactory)
         {
-            _scheduler = CreateScheduler(schedulerFactory);
+            Scheduler = CreateScheduler(schedulerFactory);
             JobFactory = jobFactory;
         }
+
+        public IScheduler Scheduler { get; }
 
         ~QuartzScheduler()
         {
@@ -94,21 +95,21 @@ namespace PPWCode.Vernacular.Quartz.I
         ///     Returns the name of the <see cref="T:Quartz.IScheduler" />.
         /// </summary>
         public string SchedulerName
-            => _scheduler.SchedulerName;
+            => Scheduler.SchedulerName;
 
         /// <inheritdoc />
         /// <summary>
         ///     Returns the instance Id of the <see cref="T:Quartz.IScheduler" />.
         /// </summary>
         public string SchedulerInstanceId
-            => _scheduler.SchedulerInstanceId;
+            => Scheduler.SchedulerInstanceId;
 
         /// <inheritdoc />
         /// <summary>
         ///     Returns the <see cref="T:Quartz.SchedulerContext" /> of the <see cref="T:Quartz.IScheduler" />.
         /// </summary>
         public SchedulerContext Context
-            => _scheduler.Context;
+            => Scheduler.Context;
 
         /// <summary>
         ///     Reports whether the <see cref="T:Quartz.IScheduler" /> is in stand-by mode.
@@ -117,14 +118,14 @@ namespace PPWCode.Vernacular.Quartz.I
         /// <seealso cref="M:Quartz.IScheduler.Standby" />
         /// <seealso cref="M:Quartz.IScheduler.Start" />
         public bool InStandbyMode
-            => _scheduler.InStandbyMode;
+            => Scheduler.InStandbyMode;
 
         /// <summary>
         ///     Reports whether the <see cref="T:Quartz.IScheduler" /> has been Shutdown.
         /// </summary>
         /// <inheritdoc />
         public bool IsShutdown
-            => _scheduler.IsShutdown;
+            => Scheduler.IsShutdown;
 
         /// <summary>
         ///     Set the <see cref="P:Quartz.IScheduler.JobFactory" /> that will be responsible for producing
@@ -139,7 +140,7 @@ namespace PPWCode.Vernacular.Quartz.I
         /// <seealso cref="T:Quartz.Spi.IJobFactory" />
         public IJobFactory JobFactory
         {
-            set => _scheduler.JobFactory = value;
+            set => Scheduler.JobFactory = value;
         }
 
         /// <summary>
@@ -152,7 +153,7 @@ namespace PPWCode.Vernacular.Quartz.I
         /// <seealso cref="T:Quartz.ITriggerListener" />
         /// <seealso cref="T:Quartz.ISchedulerListener" />
         public IListenerManager ListenerManager
-            => _scheduler.ListenerManager;
+            => Scheduler.ListenerManager;
 
         /// <inheritdoc />
         /// <summary>
@@ -168,7 +169,7 @@ namespace PPWCode.Vernacular.Quartz.I
         /// <seealso cref="P:Quartz.IScheduler.IsShutdown" />
         /// <seealso cref="P:Quartz.IScheduler.InStandbyMode" />
         public bool IsStarted
-            => _scheduler.IsStarted;
+            => Scheduler.IsStarted;
 
         /// <inheritdoc />
         /// <summary>
@@ -180,8 +181,8 @@ namespace PPWCode.Vernacular.Quartz.I
         /// <returns>
         ///     <c>true</c> if [is job group paused] [the specified group name]; otherwise, <c>false</c>.
         /// </returns>
-        public Task<bool> IsJobGroupPaused(string groupName, CancellationToken token = default)
-            => _scheduler.IsJobGroupPaused(groupName, token);
+        public virtual Task<bool> IsJobGroupPaused(string groupName, CancellationToken token = default)
+            => Scheduler.IsJobGroupPaused(groupName, token);
 
         /// <summary>
         ///     returns true if the given TriggerGroup
@@ -191,8 +192,8 @@ namespace PPWCode.Vernacular.Quartz.I
         /// <param name="token">The token.</param>
         /// <returns></returns>
         /// <inheritdoc />
-        public Task<bool> IsTriggerGroupPaused(string groupName, CancellationToken token = default)
-            => _scheduler.IsTriggerGroupPaused(groupName, token);
+        public virtual Task<bool> IsTriggerGroupPaused(string groupName, CancellationToken token = default)
+            => Scheduler.IsTriggerGroupPaused(groupName, token);
 
         /// <summary>
         ///     Get a <see cref="T:Quartz.SchedulerMetaData" /> object describing the settings
@@ -205,8 +206,8 @@ namespace PPWCode.Vernacular.Quartz.I
         ///     soon as it's returned, the meta data values may be different.
         /// </remarks>
         /// <inheritdoc />
-        public Task<SchedulerMetaData> GetMetaData(CancellationToken token = default)
-            => _scheduler.GetMetaData(token);
+        public virtual Task<SchedulerMetaData> GetMetaData(CancellationToken token = default)
+            => Scheduler.GetMetaData(token);
 
         /// <summary>
         ///     Return a list of <see cref="T:Quartz.IJobExecutionContext" /> objects that
@@ -229,8 +230,8 @@ namespace PPWCode.Vernacular.Quartz.I
         /// </remarks>
         /// <inheritdoc />
         /// <seealso cref="T:Quartz.IJobExecutionContext" />
-        public Task<IReadOnlyCollection<IJobExecutionContext>> GetCurrentlyExecutingJobs(CancellationToken token = default)
-            => _scheduler.GetCurrentlyExecutingJobs(token);
+        public virtual Task<IReadOnlyCollection<IJobExecutionContext>> GetCurrentlyExecutingJobs(CancellationToken token = default)
+            => Scheduler.GetCurrentlyExecutingJobs(token);
 
         /// <summary>
         ///     Get the names of all known <see cref="T:Quartz.IJobDetail" /> groups.
@@ -238,8 +239,8 @@ namespace PPWCode.Vernacular.Quartz.I
         /// <param name="token">The token.</param>
         /// <returns></returns>
         /// <inheritdoc />
-        public Task<IReadOnlyCollection<string>> GetJobGroupNames(CancellationToken token = default)
-            => _scheduler.GetJobGroupNames(token);
+        public virtual Task<IReadOnlyCollection<string>> GetJobGroupNames(CancellationToken token = default)
+            => Scheduler.GetJobGroupNames(token);
 
         /// <summary>
         ///     Get the names of all known <see cref="T:Quartz.ITrigger" /> groups.
@@ -247,8 +248,8 @@ namespace PPWCode.Vernacular.Quartz.I
         /// <param name="token">The token.</param>
         /// <returns></returns>
         /// <inheritdoc />
-        public Task<IReadOnlyCollection<string>> GetTriggerGroupNames(CancellationToken token = default)
-            => _scheduler.GetTriggerGroupNames(token);
+        public virtual Task<IReadOnlyCollection<string>> GetTriggerGroupNames(CancellationToken token = default)
+            => Scheduler.GetTriggerGroupNames(token);
 
         /// <summary>
         ///     Get the names of all <see cref="T:Quartz.ITrigger" /> groups that are paused.
@@ -256,8 +257,8 @@ namespace PPWCode.Vernacular.Quartz.I
         /// <param name="token">The token.</param>
         /// <returns></returns>
         /// <inheritdoc />
-        public Task<IReadOnlyCollection<string>> GetPausedTriggerGroups(CancellationToken token = default)
-            => _scheduler.GetPausedTriggerGroups(token);
+        public virtual Task<IReadOnlyCollection<string>> GetPausedTriggerGroups(CancellationToken token = default)
+            => Scheduler.GetPausedTriggerGroups(token);
 
         /// <summary>
         ///     Starts the <see cref="T:Quartz.IScheduler" />'s threads that fire <see cref="T:Quartz.ITrigger" />s.
@@ -275,8 +276,8 @@ namespace PPWCode.Vernacular.Quartz.I
         /// <seealso cref="M:Quartz.IScheduler.StartDelayed(System.TimeSpan)" />
         /// <seealso cref="M:Quartz.IScheduler.Standby" />
         /// <seealso cref="M:Quartz.IScheduler.Shutdown(System.Boolean)" />
-        public Task Start(CancellationToken token)
-            => _scheduler.Start(token);
+        public virtual Task Start(CancellationToken token)
+            => Scheduler.Start(token);
 
         /// <summary>
         ///     Calls <see cref="M:Quartz.IScheduler.Start" /> after the indicated delay.
@@ -291,8 +292,8 @@ namespace PPWCode.Vernacular.Quartz.I
         /// <seealso cref="M:Quartz.IScheduler.Start" />
         /// <seealso cref="M:Quartz.IScheduler.Standby" />
         /// <seealso cref="M:Quartz.IScheduler.Shutdown(System.Boolean)" />
-        public Task StartDelayed(TimeSpan delay, CancellationToken token = default)
-            => _scheduler.StartDelayed(delay, token);
+        public virtual Task StartDelayed(TimeSpan delay, CancellationToken token = default)
+            => Scheduler.StartDelayed(delay, token);
 
         /// <summary>
         ///     Temporarily halts the <see cref="T:Quartz.IScheduler" />'s firing of <see cref="T:Quartz.ITrigger" />s.
@@ -314,8 +315,8 @@ namespace PPWCode.Vernacular.Quartz.I
         /// <inheritdoc />
         /// <seealso cref="M:Quartz.IScheduler.Start" />
         /// <seealso cref="M:Quartz.IScheduler.PauseAll" />
-        public Task Standby(CancellationToken token = default)
-            => _scheduler.Standby(token);
+        public virtual Task Standby(CancellationToken token = default)
+            => Scheduler.Standby(token);
 
         /// <summary>
         ///     Halts the <see cref="T:Quartz.IScheduler" />'s firing of <see cref="T:Quartz.ITrigger" />s,
@@ -329,7 +330,7 @@ namespace PPWCode.Vernacular.Quartz.I
         /// </remarks>
         /// <inheritdoc />
         /// <seealso cref="M:Quartz.IScheduler.Shutdown(System.Boolean)" />
-        public Task Shutdown(CancellationToken token = default)
+        public virtual Task Shutdown(CancellationToken token = default)
             => StopAsync(token);
 
         /// <summary>
@@ -347,8 +348,8 @@ namespace PPWCode.Vernacular.Quartz.I
         /// </remarks>
         /// <inheritdoc />
         /// <seealso cref="M:Quartz.IScheduler.Shutdown" />
-        public Task Shutdown(bool waitForJobsToComplete, CancellationToken token = default)
-            => _scheduler.Shutdown(waitForJobsToComplete, token);
+        public virtual Task Shutdown(bool waitForJobsToComplete, CancellationToken token = default)
+            => Scheduler.Shutdown(waitForJobsToComplete, token);
 
         /// <summary>
         ///     Add the given <see cref="T:Quartz.IJobDetail" /> to the
@@ -364,8 +365,8 @@ namespace PPWCode.Vernacular.Quartz.I
         ///     will be set to reference the Job passed with it into this method.
         /// </remarks>
         /// <inheritdoc />
-        public Task<DateTimeOffset> ScheduleJob(IJobDetail jobDetail, ITrigger trigger, CancellationToken token = default)
-            => _scheduler.ScheduleJob(jobDetail, trigger, token);
+        public virtual Task<DateTimeOffset> ScheduleJob(IJobDetail jobDetail, ITrigger trigger, CancellationToken token = default)
+            => Scheduler.ScheduleJob(jobDetail, trigger, token);
 
         /// <summary>
         ///     Schedule the given <see cref="T:Quartz.ITrigger" /> with the
@@ -375,8 +376,8 @@ namespace PPWCode.Vernacular.Quartz.I
         /// <param name="token">The token.</param>
         /// <returns></returns>
         /// <inheritdoc />
-        public Task<DateTimeOffset> ScheduleJob(ITrigger trigger, CancellationToken token = default)
-            => _scheduler.ScheduleJob(trigger, token);
+        public virtual Task<DateTimeOffset> ScheduleJob(ITrigger trigger, CancellationToken token = default)
+            => Scheduler.ScheduleJob(trigger, token);
 
         /// <summary>
         ///     Schedules the job.
@@ -387,12 +388,12 @@ namespace PPWCode.Vernacular.Quartz.I
         /// <param name="token">The token.</param>
         /// <returns></returns>
         /// <inheritdoc />
-        public Task ScheduleJob(
+        public virtual Task ScheduleJob(
             IJobDetail jobDetail,
             IReadOnlyCollection<ITrigger> triggersForJob,
             bool replace,
             CancellationToken token = default)
-            => _scheduler.ScheduleJob(jobDetail, triggersForJob, replace, token);
+            => Scheduler.ScheduleJob(jobDetail, triggersForJob, replace, token);
 
         /// <summary>
         ///     Schedules the jobs.
@@ -402,8 +403,8 @@ namespace PPWCode.Vernacular.Quartz.I
         /// <param name="token">The token.</param>
         /// <returns></returns>
         /// <inheritdoc />
-        public Task ScheduleJobs(IReadOnlyDictionary<IJobDetail, IReadOnlyCollection<ITrigger>> triggersAndJobs, bool replace, CancellationToken token = default)
-            => _scheduler.ScheduleJobs(triggersAndJobs, replace, token);
+        public virtual Task ScheduleJobs(IReadOnlyDictionary<IJobDetail, IReadOnlyCollection<ITrigger>> triggersAndJobs, bool replace, CancellationToken token = default)
+            => Scheduler.ScheduleJobs(triggersAndJobs, replace, token);
 
         /// <summary>
         ///     Remove the indicated <see cref="T:Quartz.ITrigger" /> from the scheduler.
@@ -416,8 +417,8 @@ namespace PPWCode.Vernacular.Quartz.I
         /// <param name="token">The token.</param>
         /// <returns></returns>
         /// <inheritdoc />
-        public Task<bool> UnscheduleJob(TriggerKey triggerKey, CancellationToken token = default)
-            => _scheduler.UnscheduleJob(triggerKey, token);
+        public virtual Task<bool> UnscheduleJob(TriggerKey triggerKey, CancellationToken token = default)
+            => Scheduler.UnscheduleJob(triggerKey, token);
 
         /// <summary>
         ///     Remove all of the indicated <see cref="T:Quartz.ITrigger" />s from the scheduler.
@@ -437,8 +438,8 @@ namespace PPWCode.Vernacular.Quartz.I
         ///     of time).
         /// </remarks>
         /// <inheritdoc />
-        public Task<bool> UnscheduleJobs(IReadOnlyCollection<TriggerKey> triggerKeys, CancellationToken token = default)
-            => _scheduler.UnscheduleJobs(triggerKeys, token);
+        public virtual Task<bool> UnscheduleJobs(IReadOnlyCollection<TriggerKey> triggerKeys, CancellationToken token = default)
+            => Scheduler.UnscheduleJobs(triggerKeys, token);
 
         /// <inheritdoc />
         /// <summary>
@@ -456,8 +457,8 @@ namespace PPWCode.Vernacular.Quartz.I
         ///     new trigger is therefore not stored),  otherwise
         ///     the first fire time of the newly scheduled trigger.
         /// </returns>
-        public Task<DateTimeOffset?> RescheduleJob(TriggerKey triggerKey, ITrigger newTrigger, CancellationToken token = default)
-            => _scheduler.RescheduleJob(triggerKey, newTrigger, token);
+        public virtual Task<DateTimeOffset?> RescheduleJob(TriggerKey triggerKey, ITrigger newTrigger, CancellationToken token = default)
+            => Scheduler.RescheduleJob(triggerKey, newTrigger, token);
 
         /// <inheritdoc />
         /// <summary>
@@ -475,8 +476,8 @@ namespace PPWCode.Vernacular.Quartz.I
         ///     The <see cref="T:Quartz.IJob" /> must by definition be 'durable', if it is not,
         ///     SchedulerException will be thrown.
         /// </remarks>
-        public Task AddJob(IJobDetail jobDetail, bool replace, CancellationToken token = default)
-            => _scheduler.AddJob(jobDetail, replace, token);
+        public virtual Task AddJob(IJobDetail jobDetail, bool replace, CancellationToken token = default)
+            => Scheduler.AddJob(jobDetail, replace, token);
 
         /// <inheritdoc />
         /// <summary>
@@ -490,12 +491,12 @@ namespace PPWCode.Vernacular.Quartz.I
         /// </param>
         /// <param name="token">The token.</param>
         /// <returns></returns>
-        public Task AddJob(
+        public virtual Task AddJob(
             IJobDetail jobDetail,
             bool replace,
             bool storeNonDurableWhileAwaitingScheduling,
             CancellationToken token = default)
-            => _scheduler.AddJob(jobDetail, replace, storeNonDurableWhileAwaitingScheduling, token);
+            => Scheduler.AddJob(jobDetail, replace, storeNonDurableWhileAwaitingScheduling, token);
 
         /// <inheritdoc />
         /// <summary>
@@ -507,8 +508,8 @@ namespace PPWCode.Vernacular.Quartz.I
         /// <returns>
         ///     true if the Job was found and deleted.
         /// </returns>
-        public Task<bool> DeleteJob(JobKey jobKey, CancellationToken token = default)
-            => _scheduler.DeleteJob(jobKey, token);
+        public virtual Task<bool> DeleteJob(JobKey jobKey, CancellationToken token = default)
+            => Scheduler.DeleteJob(jobKey, token);
 
         /// <summary>
         ///     Delete the identified jobs from the Scheduler - and any
@@ -528,8 +529,8 @@ namespace PPWCode.Vernacular.Quartz.I
         ///     of time).
         /// </remarks>
         /// <inheritdoc />
-        public Task<bool> DeleteJobs(IReadOnlyCollection<JobKey> jobKeys, CancellationToken token = default)
-            => _scheduler.DeleteJobs(jobKeys, token);
+        public virtual Task<bool> DeleteJobs(IReadOnlyCollection<JobKey> jobKeys, CancellationToken token = default)
+            => Scheduler.DeleteJobs(jobKeys, token);
 
         /// <summary>
         ///     Trigger the identified <see cref="T:Quartz.IJobDetail" />
@@ -539,8 +540,8 @@ namespace PPWCode.Vernacular.Quartz.I
         /// <param name="token">The token.</param>
         /// <returns></returns>
         /// <inheritdoc />
-        public Task TriggerJob(JobKey jobKey, CancellationToken token = default)
-            => _scheduler.TriggerJob(jobKey, token);
+        public virtual Task TriggerJob(JobKey jobKey, CancellationToken token = default)
+            => Scheduler.TriggerJob(jobKey, token);
 
         /// <summary>
         ///     Trigger the identified <see cref="T:Quartz.IJobDetail" /> (Execute it now).
@@ -553,8 +554,8 @@ namespace PPWCode.Vernacular.Quartz.I
         /// <param name="token">The token.</param>
         /// <returns></returns>
         /// <inheritdoc />
-        public Task TriggerJob(JobKey jobKey, JobDataMap data, CancellationToken token = default)
-            => _scheduler.TriggerJob(jobKey, data, token);
+        public virtual Task TriggerJob(JobKey jobKey, JobDataMap data, CancellationToken token = default)
+            => Scheduler.TriggerJob(jobKey, data, token);
 
         /// <summary>
         ///     Pause the <see cref="T:Quartz.IJobDetail" /> with the given
@@ -564,8 +565,8 @@ namespace PPWCode.Vernacular.Quartz.I
         /// <param name="token">The token.</param>
         /// <returns></returns>
         /// <inheritdoc />
-        public Task PauseJob(JobKey jobKey, CancellationToken token = default)
-            => _scheduler.PauseJob(jobKey, token);
+        public virtual Task PauseJob(JobKey jobKey, CancellationToken token = default)
+            => Scheduler.PauseJob(jobKey, token);
 
         /// <summary>
         ///     Pause all of the <see cref="T:Quartz.IJobDetail" />s in the
@@ -596,8 +597,8 @@ namespace PPWCode.Vernacular.Quartz.I
         /// </remarks>
         /// <inheritdoc />
         /// <seealso cref="M:Quartz.IScheduler.ResumeJobs(Quartz.Impl.Matchers.GroupMatcher{Quartz.JobKey})" />
-        public Task PauseJobs(GroupMatcher<JobKey> matcher, CancellationToken token = default)
-            => _scheduler.PauseJobs(matcher, token);
+        public virtual Task PauseJobs(GroupMatcher<JobKey> matcher, CancellationToken token = default)
+            => Scheduler.PauseJobs(matcher, token);
 
         /// <summary>
         ///     Pause the <see cref="T:Quartz.ITrigger" /> with the given key.
@@ -606,8 +607,8 @@ namespace PPWCode.Vernacular.Quartz.I
         /// <param name="token">The token.</param>
         /// <returns></returns>
         /// <inheritdoc />
-        public Task PauseTrigger(TriggerKey triggerKey, CancellationToken token = default)
-            => _scheduler.PauseTrigger(triggerKey, token);
+        public virtual Task PauseTrigger(TriggerKey triggerKey, CancellationToken token = default)
+            => Scheduler.PauseTrigger(triggerKey, token);
 
         /// <summary>
         ///     Pause all of the <see cref="T:Quartz.ITrigger" />s in the groups matching.
@@ -637,8 +638,8 @@ namespace PPWCode.Vernacular.Quartz.I
         /// </remarks>
         /// <inheritdoc />
         /// <seealso cref="M:Quartz.IScheduler.ResumeTriggers(Quartz.Impl.Matchers.GroupMatcher{Quartz.TriggerKey})" />
-        public Task PauseTriggers(GroupMatcher<TriggerKey> matcher, CancellationToken token = default)
-            => _scheduler.PauseTriggers(matcher, token);
+        public virtual Task PauseTriggers(GroupMatcher<TriggerKey> matcher, CancellationToken token = default)
+            => Scheduler.PauseTriggers(matcher, token);
 
         /// <summary>
         ///     Resume (un-pause) the <see cref="T:Quartz.IJobDetail" /> with
@@ -653,8 +654,8 @@ namespace PPWCode.Vernacular.Quartz.I
         ///     instruction will be applied.
         /// </remarks>
         /// <inheritdoc />
-        public Task ResumeJob(JobKey jobKey, CancellationToken token = default)
-            => _scheduler.ResumeJob(jobKey, token);
+        public virtual Task ResumeJob(JobKey jobKey, CancellationToken token = default)
+            => Scheduler.ResumeJob(jobKey, token);
 
         /// <summary>
         ///     Resume (un-pause) all of the <see cref="T:Quartz.IJobDetail" />s
@@ -670,8 +671,8 @@ namespace PPWCode.Vernacular.Quartz.I
         /// </remarks>
         /// <inheritdoc />
         /// <seealso cref="M:Quartz.IScheduler.PauseJobs(Quartz.Impl.Matchers.GroupMatcher{Quartz.JobKey})" />
-        public Task ResumeJobs(GroupMatcher<JobKey> matcher, CancellationToken token = default)
-            => _scheduler.ResumeJobs(matcher, token);
+        public virtual Task ResumeJobs(GroupMatcher<JobKey> matcher, CancellationToken token = default)
+            => Scheduler.ResumeJobs(matcher, token);
 
         /// <summary>
         ///     Resume (un-pause) the <see cref="T:Quartz.ITrigger" /> with the given
@@ -685,8 +686,8 @@ namespace PPWCode.Vernacular.Quartz.I
         ///     <see cref="T:Quartz.ITrigger" />'s misfire instruction will be applied.
         /// </remarks>
         /// <inheritdoc />
-        public Task ResumeTrigger(TriggerKey triggerKey, CancellationToken token = default)
-            => _scheduler.ResumeTrigger(triggerKey, token);
+        public virtual Task ResumeTrigger(TriggerKey triggerKey, CancellationToken token = default)
+            => Scheduler.ResumeTrigger(triggerKey, token);
 
         /// <inheritdoc />
         /// <summary>
@@ -697,8 +698,8 @@ namespace PPWCode.Vernacular.Quartz.I
         ///     <see cref="T:Quartz.ITrigger" />'s misfire instruction will be applied.
         /// </remarks>
         /// <seealso cref="M:Quartz.IScheduler.PauseTriggers(Quartz.Impl.Matchers.GroupMatcher{Quartz.TriggerKey})" />
-        public Task ResumeTriggers(GroupMatcher<TriggerKey> matcher, CancellationToken token = default)
-            => _scheduler.ResumeTriggers(matcher, token);
+        public virtual Task ResumeTriggers(GroupMatcher<TriggerKey> matcher, CancellationToken token = default)
+            => Scheduler.ResumeTriggers(matcher, token);
 
         /// <summary>
         ///     Pause all triggers - similar to calling
@@ -717,8 +718,8 @@ namespace PPWCode.Vernacular.Quartz.I
         /// <seealso cref="M:Quartz.IScheduler.ResumeAll" />
         /// <seealso cref="M:Quartz.IScheduler.PauseTriggers(Quartz.Impl.Matchers.GroupMatcher{Quartz.TriggerKey})" />
         /// <seealso cref="M:Quartz.IScheduler.Standby" />
-        public Task PauseAll(CancellationToken token = default)
-            => _scheduler.PauseAll(token);
+        public virtual Task PauseAll(CancellationToken token = default)
+            => Scheduler.PauseAll(token);
 
         /// <inheritdoc />
         /// <summary>
@@ -733,8 +734,8 @@ namespace PPWCode.Vernacular.Quartz.I
         ///     <see cref="T:Quartz.ITrigger" />'s misfire instruction will be applied.
         /// </remarks>
         /// <seealso cref="M:Quartz.IScheduler.PauseAll" />
-        public Task ResumeAll(CancellationToken token = default)
-            => _scheduler.ResumeAll(token);
+        public virtual Task ResumeAll(CancellationToken token = default)
+            => Scheduler.ResumeAll(token);
 
         /// <summary>
         ///     Get the keys of all the <see cref="T:Quartz.IJobDetail" />s in the matching groups.
@@ -743,8 +744,8 @@ namespace PPWCode.Vernacular.Quartz.I
         /// <param name="token">The token.</param>
         /// <returns></returns>
         /// <inheritdoc />
-        public Task<IReadOnlyCollection<JobKey>> GetJobKeys(GroupMatcher<JobKey> matcher, CancellationToken token = default)
-            => _scheduler.GetJobKeys(matcher, token);
+        public virtual Task<IReadOnlyCollection<JobKey>> GetJobKeys(GroupMatcher<JobKey> matcher, CancellationToken token = default)
+            => Scheduler.GetJobKeys(matcher, token);
 
         /// <summary>
         ///     Get all <see cref="T:Quartz.ITrigger" /> s that are associated with the
@@ -759,8 +760,8 @@ namespace PPWCode.Vernacular.Quartz.I
         ///     trigger afterward (e.g. see <see cref="M:Quartz.IScheduler.RescheduleJob(Quartz.TriggerKey,Quartz.ITrigger)" />).
         /// </remarks>
         /// <inheritdoc />
-        public Task<IReadOnlyCollection<ITrigger>> GetTriggersOfJob(JobKey jobKey, CancellationToken token = default)
-            => _scheduler.GetTriggersOfJob(jobKey, token);
+        public virtual Task<IReadOnlyCollection<ITrigger>> GetTriggersOfJob(JobKey jobKey, CancellationToken token = default)
+            => Scheduler.GetTriggersOfJob(jobKey, token);
 
         /// <summary>
         ///     Get the names of all the <see cref="T:Quartz.ITrigger" />s in the given
@@ -770,8 +771,8 @@ namespace PPWCode.Vernacular.Quartz.I
         /// <param name="token">The token.</param>
         /// <returns></returns>
         /// <inheritdoc />
-        public Task<IReadOnlyCollection<TriggerKey>> GetTriggerKeys(GroupMatcher<TriggerKey> matcher, CancellationToken token = default)
-            => _scheduler.GetTriggerKeys(matcher, token);
+        public virtual Task<IReadOnlyCollection<TriggerKey>> GetTriggerKeys(GroupMatcher<TriggerKey> matcher, CancellationToken token = default)
+            => Scheduler.GetTriggerKeys(matcher, token);
 
         /// <summary>
         ///     Get the <see cref="T:Quartz.IJobDetail" /> for the <see cref="T:Quartz.IJob" />
@@ -786,8 +787,8 @@ namespace PPWCode.Vernacular.Quartz.I
         ///     JobDetail afterward (e.g. see <see cref="M:Quartz.IScheduler.AddJob(Quartz.IJobDetail,System.Boolean)" />).
         /// </remarks>
         /// <inheritdoc />
-        public Task<IJobDetail> GetJobDetail(JobKey jobKey, CancellationToken token = default)
-            => _scheduler.GetJobDetail(jobKey, token);
+        public virtual Task<IJobDetail> GetJobDetail(JobKey jobKey, CancellationToken token = default)
+            => Scheduler.GetJobDetail(jobKey, token);
 
         /// <summary>
         ///     Get the <see cref="T:Quartz.ITrigger" /> instance with the given key.
@@ -801,8 +802,8 @@ namespace PPWCode.Vernacular.Quartz.I
         ///     trigger afterward (e.g. see <see cref="M:Quartz.IScheduler.RescheduleJob(Quartz.TriggerKey,Quartz.ITrigger)" />).
         /// </remarks>
         /// <inheritdoc />
-        public Task<ITrigger> GetTrigger(TriggerKey triggerKey, CancellationToken token = default)
-            => _scheduler.GetTrigger(triggerKey, token);
+        public virtual Task<ITrigger> GetTrigger(TriggerKey triggerKey, CancellationToken token = default)
+            => Scheduler.GetTrigger(triggerKey, token);
 
         /// <summary>
         ///     Get the current state of the identified <see cref="T:Quartz.ITrigger" />.
@@ -817,8 +818,8 @@ namespace PPWCode.Vernacular.Quartz.I
         /// <seealso cref="F:Quartz.TriggerState.Blocked" />
         /// <seealso cref="F:Quartz.TriggerState.Error" />
         /// <seealso cref="F:Quartz.TriggerState.None" />
-        public Task<TriggerState> GetTriggerState(TriggerKey triggerKey, CancellationToken token = default)
-            => _scheduler.GetTriggerState(triggerKey, token);
+        public virtual Task<TriggerState> GetTriggerState(TriggerKey triggerKey, CancellationToken token = default)
+            => Scheduler.GetTriggerState(triggerKey, token);
 
         /// <summary>
         ///     Add (register) the given <see cref="T:Quartz.ICalendar" /> to the Scheduler.
@@ -834,13 +835,13 @@ namespace PPWCode.Vernacular.Quartz.I
         /// <param name="token">The token.</param>
         /// <returns></returns>
         /// <inheritdoc />
-        public Task AddCalendar(
+        public virtual Task AddCalendar(
             string calName,
             ICalendar calendar,
             bool replace,
             bool updateTriggers,
             CancellationToken token = default)
-            => _scheduler.AddCalendar(calName, calendar, replace, updateTriggers, token);
+            => Scheduler.AddCalendar(calName, calendar, replace, updateTriggers, token);
 
         /// <summary>
         ///     Delete the identified <see cref="T:Quartz.ICalendar" /> from the Scheduler.
@@ -856,8 +857,8 @@ namespace PPWCode.Vernacular.Quartz.I
         ///     <see cref="T:Quartz.SchedulerException" /> will be thrown.
         /// </remarks>
         /// <inheritdoc />
-        public Task<bool> DeleteCalendar(string calName, CancellationToken token = default)
-            => _scheduler.DeleteCalendar(calName, token);
+        public virtual Task<bool> DeleteCalendar(string calName, CancellationToken token = default)
+            => Scheduler.DeleteCalendar(calName, token);
 
         /// <summary>
         ///     Get the <see cref="T:Quartz.ICalendar" /> instance with the given name.
@@ -866,8 +867,8 @@ namespace PPWCode.Vernacular.Quartz.I
         /// <param name="token">The token.</param>
         /// <returns></returns>
         /// <inheritdoc />
-        public Task<ICalendar> GetCalendar(string calName, CancellationToken token = default)
-            => _scheduler.GetCalendar(calName, token);
+        public virtual Task<ICalendar> GetCalendar(string calName, CancellationToken token = default)
+            => Scheduler.GetCalendar(calName, token);
 
         /// <summary>
         ///     Get the names of all registered <see cref="T:Quartz.ICalendar" />.
@@ -875,8 +876,8 @@ namespace PPWCode.Vernacular.Quartz.I
         /// <param name="token">The token.</param>
         /// <returns></returns>
         /// <inheritdoc />
-        public Task<IReadOnlyCollection<string>> GetCalendarNames(CancellationToken token = default)
-            => _scheduler.GetCalendarNames(token);
+        public virtual Task<IReadOnlyCollection<string>> GetCalendarNames(CancellationToken token = default)
+            => Scheduler.GetCalendarNames(token);
 
         /// <summary>
         ///     Request the interruption, within this Scheduler instance, of all
@@ -913,8 +914,8 @@ namespace PPWCode.Vernacular.Quartz.I
         /// <inheritdoc />
         /// <seealso cref="T:Quartz.IInterruptableJob" />
         /// <seealso cref="M:Quartz.IScheduler.GetCurrentlyExecutingJobs" />
-        public Task<bool> Interrupt(JobKey jobKey, CancellationToken token = default)
-            => _scheduler.Interrupt(jobKey, token);
+        public virtual Task<bool> Interrupt(JobKey jobKey, CancellationToken token = default)
+            => Scheduler.Interrupt(jobKey, token);
 
         /// <summary>
         ///     Request the interruption, within this Scheduler instance, of the
@@ -936,8 +937,8 @@ namespace PPWCode.Vernacular.Quartz.I
         /// <seealso cref="M:Quartz.IScheduler.GetCurrentlyExecutingJobs" />
         /// <seealso cref="P:Quartz.IJobExecutionContext.FireInstanceId" />
         /// <seealso cref="M:Quartz.IScheduler.Interrupt(Quartz.JobKey)" />
-        public Task<bool> Interrupt(string fireInstanceId, CancellationToken token = default)
-            => _scheduler.Interrupt(fireInstanceId, token);
+        public virtual Task<bool> Interrupt(string fireInstanceId, CancellationToken token = default)
+            => Scheduler.Interrupt(fireInstanceId, token);
 
         /// <summary>
         ///     Determine whether a <see cref="T:Quartz.IJob" /> with the given identifier already
@@ -949,8 +950,8 @@ namespace PPWCode.Vernacular.Quartz.I
         ///     true if a Job exists with the given identifier
         /// </returns>
         /// <inheritdoc />
-        public Task<bool> CheckExists(JobKey jobKey, CancellationToken token = default)
-            => _scheduler.CheckExists(jobKey, token);
+        public virtual Task<bool> CheckExists(JobKey jobKey, CancellationToken token = default)
+            => Scheduler.CheckExists(jobKey, token);
 
         /// <summary>
         ///     Determine whether a <see cref="T:Quartz.ITrigger" /> with the given identifier already
@@ -962,8 +963,8 @@ namespace PPWCode.Vernacular.Quartz.I
         ///     true if a Trigger exists with the given identifier
         /// </returns>
         /// <inheritdoc />
-        public Task<bool> CheckExists(TriggerKey triggerKey, CancellationToken token = default)
-            => _scheduler.CheckExists(triggerKey, token);
+        public virtual Task<bool> CheckExists(TriggerKey triggerKey, CancellationToken token = default)
+            => Scheduler.CheckExists(triggerKey, token);
 
         /// <summary>
         ///     Clears (deletes!) all scheduling data - all <see cref="T:Quartz.IJob" />s, <see cref="T:Quartz.ITrigger" />s
@@ -972,8 +973,8 @@ namespace PPWCode.Vernacular.Quartz.I
         /// <param name="token">The token.</param>
         /// <returns></returns>
         /// <inheritdoc />
-        public Task Clear(CancellationToken token = default)
-            => _scheduler.Clear(token);
+        public virtual Task Clear(CancellationToken token = default)
+            => Scheduler.Clear(token);
 
         /// <summary>
         ///     Starts this instance.
@@ -1012,7 +1013,7 @@ namespace PPWCode.Vernacular.Quartz.I
         /// <param name="token">The token.</param>
         /// <returns>Task</returns>
         public Task StopAsync(CancellationToken token)
-            => _scheduler.Shutdown(WaitForJobsToCompleteAtShutdown, token);
+            => Scheduler.Shutdown(WaitForJobsToCompleteAtShutdown, token);
 
         /// <summary>
         ///     Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
