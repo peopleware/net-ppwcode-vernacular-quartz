@@ -56,6 +56,7 @@
  ** make most of the methods virtual
  * Improve QuartzFacility
  ** Possibility to add additional forwarded types for scheduler / scheduler-factory components
+ 3.1.0 Build on .net 6.0
       ]]>
     </PackageReleaseNotes>
 
