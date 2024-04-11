@@ -66,7 +66,9 @@
  ** make most of the methods virtual
  * Improve QuartzFacility
  ** Possibility to add additional forwarded types for scheduler / scheduler-factory components
- 3.1.0 Build on .net 6.0
+3.1.0 Build on .net 6.0
+3.2.0 Upgrading dependencies, Target net48, net481, .net 6.0, .net 8.0
+      Remove support for .net core 3.1, .net 5.0 
       ]]>
     </PackageReleaseNotes>
 
