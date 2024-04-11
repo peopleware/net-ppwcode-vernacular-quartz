@@ -5,6 +5,16 @@
   <!-- version number -->
   <Import Project="version.props" />
 
+  <!-- set default for configuration -->
+  <PropertyGroup Condition=" '$(Configuration)' == '' ">
+    <Configuration>Debug</Configuration>
+  </PropertyGroup>
+
+  <!-- set default for platform -->
+  <PropertyGroup Condition=" '$(Platform)' == '' ">
+    <Platform>AnyCPU</Platform>
+  </PropertyGroup>
+  
   <PropertyGroup>
     <!-- version numbers -->
     <AssemblyVersion>$(GacVersion)</AssemblyVersion>
@@ -56,7 +66,9 @@
  ** make most of the methods virtual
  * Improve QuartzFacility
  ** Possibility to add additional forwarded types for scheduler / scheduler-factory components
- 3.1.0 Build on .net 6.0
+3.1.0 Build on .net 6.0
+3.2.0 Upgrading dependencies, Target net48, net481, .net 6.0, .net 8.0
+      Remove support for .net core 3.1, .net 5.0 
       ]]>
     </PackageReleaseNotes>
 
@@ -98,9 +110,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="JetBrains.Annotations" Version="2022.3.1" PrivateAssets="all" />
+    <PackageReference Include="JetBrains.Annotations" Version="2023.3.0" PrivateAssets="all" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118" PrivateAssets="all" IncludeAssets="runtime; build; native; contentfiles; analyzers" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="all" />
   </ItemGroup>
 
 </Project>
