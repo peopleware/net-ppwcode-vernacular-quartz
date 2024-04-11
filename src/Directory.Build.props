@@ -5,6 +5,16 @@
   <!-- version number -->
   <Import Project="version.props" />
 
+  <!-- set default for configuration -->
+  <PropertyGroup Condition=" '$(Configuration)' == '' ">
+    <Configuration>Debug</Configuration>
+  </PropertyGroup>
+
+  <!-- set default for platform -->
+  <PropertyGroup Condition=" '$(Platform)' == '' ">
+    <Platform>AnyCPU</Platform>
+  </PropertyGroup>
+  
   <PropertyGroup>
     <!-- version numbers -->
     <AssemblyVersion>$(GacVersion)</AssemblyVersion>
