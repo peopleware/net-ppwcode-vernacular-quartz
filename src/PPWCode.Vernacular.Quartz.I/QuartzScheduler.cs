@@ -1,4 +1,4 @@
-// Copyright 2020 by PeopleWare n.v..
+// Copyright 2024 by PeopleWare n.v..
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -59,11 +59,6 @@ namespace PPWCode.Vernacular.Quartz.I
 
         public IScheduler Scheduler { get; }
 
-        ~QuartzScheduler()
-        {
-            Dispose(false);
-        }
-
         /// <summary>
         ///     Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
@@ -72,16 +67,6 @@ namespace PPWCode.Vernacular.Quartz.I
         {
             Dispose(true);
             GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                _log.Info("Dispose is started...");
-                Stop();
-                _log.Info("Successfully disposed.");
-            }
         }
 
         /// <summary>
@@ -998,6 +983,21 @@ namespace PPWCode.Vernacular.Quartz.I
                 .GetAwaiter()
                 .GetResult();
             _log.Info("Scheduler has stopped...");
+        }
+
+        ~QuartzScheduler()
+        {
+            Dispose(false);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _log.Info("Dispose is started...");
+                Stop();
+                _log.Info("Successfully disposed.");
+            }
         }
 
         private IScheduler CreateScheduler(ISchedulerFactory schedulerFactory)
