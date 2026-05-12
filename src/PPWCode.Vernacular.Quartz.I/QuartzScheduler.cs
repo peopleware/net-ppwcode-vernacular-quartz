@@ -327,7 +327,7 @@ namespace PPWCode.Vernacular.Quartz.I
         /// </summary>
         public void Start()
         {
-            Start(default)
+            Start(CancellationToken.None)
                 .ConfigureAwait(false)
                 .GetAwaiter()
                 .GetResult();
@@ -339,7 +339,7 @@ namespace PPWCode.Vernacular.Quartz.I
         /// </summary>
         public void Stop()
         {
-            StopAsync(default)
+            StopAsync(CancellationToken.None)
                 .ConfigureAwait(false)
                 .GetAwaiter()
                 .GetResult();
