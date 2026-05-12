@@ -7,16 +7,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "solution-items", "solution-
 ProjectSection(SolutionItems) = preProject
 	src\Directory.Build.props = src\Directory.Build.props
 	src\version.props = src\version.props
+	src\common.props = src\common.props
+	src\common-tests.props = src\common-tests.props
 EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PPWCode.Vernacular.Quartz.I", "src\PPWCode.Vernacular.Quartz.I\PPWCode.Vernacular.Quartz.I.csproj", "{BA858E68-E024-49D8-82EF-2F5425EC172D}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{0B4EBC4D-C071-43CA-9E3B-F7EA18A4B351}"
-ProjectSection(SolutionItems) = preProject
-	LICENSE = LICENSE
-	NOTICE = NOTICE
-	README.md = README.md
-EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "analysers", "analysers", "{B0C2E0D1-D0A4-4F76-BDAB-ED3669C173F6}"
 	ProjectSection(SolutionItems) = preProject
@@ -30,6 +25,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build-pipeline", "build-pip
 		.github\workflows\publish.yml = .github\workflows\publish.yml
 		.github\workflows\publish-legacy.yml = .github\workflows\publish-legacy.yml
 		.github\workflows\reproduce-build.yml = .github\workflows\reproduce-build.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "package", "package", "{D724D551-5629-42C1-83AB-CA37CC16B563}"
+	ProjectSection(SolutionItems) = preProject
+		LICENSE = LICENSE
+		NOTICE = NOTICE
+		README.md = README.md
+		assets\ppw-logo.png = assets\ppw-logo.png
+		assets\ppw-logo-2.png = assets\ppw-logo-2.png
 	EndProjectSection
 EndProject
 Global
