@@ -1,43 +1,25 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <Import Project="..\common.props" />
+    <Import Project="..\common.props"/>
 
-  <ItemGroup>
-    <!-- Quartz -->
-    <PackageReference Include="Quartz" Version="3.5.*" />
-    <PackageReference Include="Quartz.Jobs" Version="3.5.*" />
-    <PackageReference Include="Quartz.Plugins" Version="3.5.*" />
-    <PackageReference Include="Quartz.Serialization.Json" Version="3.5.*" />
+    <ItemGroup>
+        <!-- Quartz -->
+        <PackageReference Include="Quartz"/>
+        <PackageReference Include="Quartz.Jobs"/>
+        <PackageReference Include="Quartz.Plugins"/>
+        <PackageReference Include="Quartz.Serialization.Json"/>
 
-    <!-- Castle Windsor / Common Logging -->
-    <PackageReference Include="Castle.Windsor" />
-    <PackageReference Include="Castle.Core" />
-    <PackageReference Include="Common.Logging" />
+        <!-- Castle Windsor / Common Logging -->
+        <PackageReference Include="Castle.Windsor"/>
+        <PackageReference Include="Castle.Core"/>
+        <PackageReference Include="Common.Logging"/>
 
-    <!-- PPWCode -->
-    <PackageReference Include="PPWCode.Vernacular.Exceptions.III" />
-    
-    <!-- System -->
-    <PackageReference Include="System.Data.SqlClient" />
-    <PackageReference Include="System.Configuration.ConfigurationManager" />
-  </ItemGroup>
+        <!-- PPWCode -->
+        <PackageReference Include="PPWCode.Vernacular.Exceptions.III"/>
 
-  <Choose>
-    <When Condition=" '$(TargetFramework)' == 'net6.0'">
-      <ItemGroup>
-        <PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.*" />
-      </ItemGroup>
-    </When>
-    <When Condition=" '$(TargetFramework)' == 'net8.0'">
-      <ItemGroup>
-        <PackageReference Include="System.Configuration.ConfigurationManager" Version="8.0.*" />
-      </ItemGroup>
-    </When>
-    <When Condition=" '$(TargetFramework)' == 'netstandard20' Or '$(TargetFramework)' == 'net48' Or '$(TargetFramework)' == 'net481'">
-      <ItemGroup>
-        <PackageReference Include="System.Configuration.ConfigurationManager" Version="8.0.*" />
-      </ItemGroup>
-    </When>
-  </Choose>
+        <!-- System -->
+        <PackageReference Include="System.Data.SqlClient"/>
+        <PackageReference Include="System.Configuration.ConfigurationManager"/>
+    </ItemGroup>
 
 </Project>

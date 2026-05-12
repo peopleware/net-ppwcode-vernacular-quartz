@@ -414,10 +414,7 @@ namespace PPWCode.Vernacular.Quartz.I
             IScheduler scheduler =
                 SchedulerRepository
                     .Instance
-                    .Lookup(schedulerName)
-                    .ConfigureAwait(false)
-                    .GetAwaiter()
-                    .GetResult();
+                    .Lookup(schedulerName);
             if (scheduler != null)
             {
                 throw new ProgrammingError(

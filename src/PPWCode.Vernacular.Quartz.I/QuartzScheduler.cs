@@ -806,6 +806,10 @@ namespace PPWCode.Vernacular.Quartz.I
         public virtual Task<TriggerState> GetTriggerState(TriggerKey triggerKey, CancellationToken token = default)
             => Scheduler.GetTriggerState(triggerKey, token);
 
+        /// <inheritdoc cref="IScheduler.ResetTriggerFromErrorState"/>
+        public Task ResetTriggerFromErrorState(TriggerKey triggerKey, CancellationToken cancellationToken = default)
+            => Scheduler.ResetTriggerFromErrorState(triggerKey, cancellationToken);
+
         /// <summary>
         ///     Add (register) the given <see cref="T:Quartz.ICalendar" /> to the Scheduler.
         /// </summary>
