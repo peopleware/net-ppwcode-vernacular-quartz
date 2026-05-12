@@ -37,6 +37,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "package", "package", "{D724
 		assets\ppw-logo-2.png = assets\ppw-logo-2.png
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PPWCode.Vernacular.Quartz.I.Tests", "src\PPWCode.Vernacular.Quartz.I.Tests\PPWCode.Vernacular.Quartz.I.Tests.csproj", "{AB07CD0B-EEA7-43CB-8EE7-189F36ECA1C7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -62,5 +64,17 @@ Global
 		{BA858E68-E024-49D8-82EF-2F5425EC172D}.Release|x64.Build.0 = Release|Any CPU
 		{BA858E68-E024-49D8-82EF-2F5425EC172D}.Release|x86.ActiveCfg = Release|Any CPU
 		{BA858E68-E024-49D8-82EF-2F5425EC172D}.Release|x86.Build.0 = Release|Any CPU
+		{AB07CD0B-EEA7-43CB-8EE7-189F36ECA1C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB07CD0B-EEA7-43CB-8EE7-189F36ECA1C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB07CD0B-EEA7-43CB-8EE7-189F36ECA1C7}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{AB07CD0B-EEA7-43CB-8EE7-189F36ECA1C7}.Debug|x64.Build.0 = Debug|Any CPU
+		{AB07CD0B-EEA7-43CB-8EE7-189F36ECA1C7}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{AB07CD0B-EEA7-43CB-8EE7-189F36ECA1C7}.Debug|x86.Build.0 = Debug|Any CPU
+		{AB07CD0B-EEA7-43CB-8EE7-189F36ECA1C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB07CD0B-EEA7-43CB-8EE7-189F36ECA1C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB07CD0B-EEA7-43CB-8EE7-189F36ECA1C7}.Release|x64.ActiveCfg = Release|Any CPU
+		{AB07CD0B-EEA7-43CB-8EE7-189F36ECA1C7}.Release|x64.Build.0 = Release|Any CPU
+		{AB07CD0B-EEA7-43CB-8EE7-189F36ECA1C7}.Release|x86.ActiveCfg = Release|Any CPU
+		{AB07CD0B-EEA7-43CB-8EE7-189F36ECA1C7}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

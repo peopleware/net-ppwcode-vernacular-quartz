@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <Import Project="..\common-tests.props"/>
+
+    <PropertyGroup>
+        <!-- Target frameworks -->
+        <TargetFrameworks>net8.0;net9.0;net10.0;net462;net47;net471;net472;net48;net481</TargetFrameworks>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(OS)' != 'Windows_NT' And $(ContinuousIntegrationBuild) == 'true' ">
+        <TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\PPWCode.Vernacular.Quartz.I\PPWCode.Vernacular.Quartz.I.csproj" />
+    </ItemGroup>
+
+
+</Project>
