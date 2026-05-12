@@ -24,6 +24,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "analysers", "analysers", "{
 		src\Analyzer-Tests.ruleset = src\Analyzer-Tests.ruleset
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build-pipeline", "build-pipeline", "{538097E9-004B-4D3B-94B8-E4035A5EB14A}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\ci.yml = .github\workflows\ci.yml
+		.github\workflows\publish.yml = .github\workflows\publish.yml
+		.github\workflows\publish-legacy.yml = .github\workflows\publish-legacy.yml
+		.github\workflows\reproduce-build.yml = .github\workflows\reproduce-build.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

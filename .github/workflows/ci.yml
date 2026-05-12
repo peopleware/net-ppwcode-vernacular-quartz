@@ -1,0 +1,118 @@
+name: Build & Test
+
+on:
+  push:
+    branches: [ "I/next", "I/feature/*", "I/bugfix/*" ]
+  pull_request:
+    branches: [ "I/next" ]
+
+jobs:
+  build-and-test:
+    name: Build & Test - ${{ matrix.name-suffix }}
+    runs-on: ${{ matrix.os }}
+    permissions:
+      checks: write
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-2022]
+        include:
+          - os: ubuntu-latest
+            name-suffix: 'Linux'
+            test-filter: 'Category=SqlServer|Category!=SqlServer'
+          - os: macos-latest
+            name-suffix: 'macOS'
+            test-filter: 'Category!=SqlServer'
+          - os: windows-2022
+            name-suffix: 'Windows'
+            test-filter: 'Category=SqlServer|Category!=SqlServer'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            8.0.x
+            9.0.x
+            10.0.x
+          global-json-file: ./global.json
+        
+      - name: Restore dependencies
+        shell: bash
+        # do not add ContinuousIntegrationBuild here
+        # since it will complain about the package lock file
+        # ContinuousIntegrationBuild=true excludes full-framework
+        # builds on Linux and macOS
+        run: |
+          dotnet restore PPWCode.Vernacular.Quartz.sln \
+            --locked-mode \
+            -p:Configuration=Release
+
+      - name: Build
+        shell: bash
+        run: |
+          dotnet build PPWCode.Vernacular.Quartz.sln \
+            --configuration Release \
+            --no-restore \
+            -p:ContinuousIntegrationBuild=true
+
+      - name: Test
+        shell: bash
+        run: |
+          dotnet test PPWCode.Vernacular.Quartz.sln \
+            --configuration Release \
+            --no-build \
+            --verbosity normal \
+            --logger "trx;LogFilePrefix=test-results" \
+            --collect:"XPlat Code Coverage" \
+            --results-directory ./coverage \
+            --filter "${{ matrix.test-filter }}" \
+            -p:ContinuousIntegrationBuild=true
+
+      - name: Publish Test Results
+        uses: dorny/test-reporter@v2
+        if: ${{ !cancelled() }} # run this step even if previous step failed
+        with:
+          name: Test Results - ${{ matrix.name-suffix }}
+          report-title: Test Results - ${{ matrix.name-suffix }}
+          path: 'coverage/test-results_*_*.trx'
+          reporter: dotnet-trx
+          fail-on-error: true
+
+      - name: Generate Coverage Report
+        if: always()
+        shell: bash
+        run: |
+          dotnet tool install -g dotnet-reportgenerator-globaltool
+          reportgenerator \
+            -reports:"coverage/*/coverage.cobertura.xml" \
+            -targetdir:"coveragereport-html" \
+            -reporttypes:"Html;MarkdownSummaryGithub" \
+            -title:"Coverage Report - ${{ matrix.name-suffix }}" \
+            -verbosity:Warning
+
+      - name: Add Coverage to Job Summary
+        if: always()
+        shell: bash
+        run: |
+          if [ -f coveragereport-html/SummaryGithub.md ]; then
+            # remove the "Summary -" prefix while we're at it
+            sed -e 's/^# Summary - \(.*\)$/# \1/' coveragereport-html/SummaryGithub.md >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Upload Coverage HTML Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage-report-html-${{ matrix.name-suffix }}
+          path: coveragereport-html/
+          retention-days: 30
+
+      - name: Upload Test and Coverage Raw Results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-and-coverage-raw-${{ matrix.name-suffix }}
+          path: coverage/
+          retention-days: 30
