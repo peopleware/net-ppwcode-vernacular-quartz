@@ -6,9 +6,10 @@ MinimumVisualStudioVersion = 15.0.26124.0
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "solution-items", "solution-items", "{8C405651-DF8F-496F-8B17-BA483ECB8653}"
 ProjectSection(SolutionItems) = preProject
 	src\Directory.Build.props = src\Directory.Build.props
-	src\version.props = src\version.props
 	src\common.props = src\common.props
 	src\common-tests.props = src\common-tests.props
+	global.json = global.json
+	src\Directory.Packages.props = src\Directory.Packages.props
 EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PPWCode.Vernacular.Quartz.I", "src\PPWCode.Vernacular.Quartz.I\PPWCode.Vernacular.Quartz.I.csproj", "{BA858E68-E024-49D8-82EF-2F5425EC172D}"
