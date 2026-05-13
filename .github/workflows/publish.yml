@@ -18,7 +18,6 @@ jobs:
         include:
           - os: ubuntu-latest
             name-suffix: 'Linux'
-            test-filter: 'Category=SqlServer|Category!=SqlServer'
           - os: macos-latest
             name-suffix: 'macOS'
             test-filter: 'Category!=SqlServer'

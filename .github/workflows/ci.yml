@@ -18,7 +18,6 @@ jobs:
         include:
           - os: ubuntu-latest
             name-suffix: 'Linux'
-            test-filter: 'Category=SqlServer|Category!=SqlServer'
           - os: macos-latest
             name-suffix: 'macOS'
             test-filter: 'Category!=SqlServer'
@@ -67,7 +66,6 @@ jobs:
             --logger "trx;LogFilePrefix=test-results" \
             --collect:"XPlat Code Coverage" \
             --results-directory ./coverage \
-            --filter "${{ matrix.test-filter }}" \
             -p:ContinuousIntegrationBuild=true
 
       - name: Publish Test Results
