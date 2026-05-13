@@ -8,9 +8,9 @@ the link to the GitHub tag is only added once we are ready to release.
 ////
 
 // some helper attributes for the release links
-:github: https://github.com/peopleware/net-ppwcode-vernacular-quartz/releases/tag/
+:github: https://github.com/peopleware/net-ppwcode-vernacular-quartz/releases/tag/I%2F
 :nuget: https://www.nuget.org/packages/PPWCode.Vernacular.Quartz.I/
-:ppwcode-docs: https://peopleware.github.io/net-ppwcode-docs/ppwcode-vernacular-quartz/
+:ppwcode-docs: https://peopleware.github.io/net-ppwcode-docs/ppwcode-vernacular-quartz-i/
 :main: PPWCode.Vernacular.Quartz.I
 
 :release: 4.0.0

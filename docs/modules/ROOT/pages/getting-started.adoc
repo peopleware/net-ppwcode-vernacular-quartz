@@ -4,7 +4,9 @@
 
 This package is available on NuGet: https://www.nuget.org/packages/PPWCode.Vernacular.Quartz.I[PPWCode.Vernacular.Quartz.I].
 
-You can use your IDE to add it as a dependency to your project, or manually add it in the `.csproj` file. You would typically add this project as a dependency to your `API` project.  This would look similar to the following:
+You can use your IDE to add it as a dependency to your project, or manually add it in the `.csproj` file.
+
+This would look similar to the following:
 
 [source,xml]
 ----

@@ -1,7 +1,8 @@
 = About
 
-The project supports the most recent (supported) .NET SDKs.
+The library PPWCode.Vernacular.Quartz.I is part of the .NET PPWCode project and provides helper functionality for projects that use Quartz.
 
+The library supports both different versions of .NET full framework and more recent .NET SDKs.
 
 == Development
 
