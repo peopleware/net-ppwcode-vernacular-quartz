@@ -15,35 +15,35 @@ the link to the GitHub tag is only added once we are ready to release.
 
 :release: 4.0.0
 == `{release}`
-include::partial$changelog-release-section-old.adoc[]
+include::partial$changelog-release-section.adoc[]
 include::partial$changelog-{release}.adoc[]
 
 :release: 3.2.0
 == `{release}`
-include::partial$changelog-release-section-old.adoc[]
+include::partial$changelog-release-section.adoc[]
 include::partial$changelog-{release}.adoc[]
 
 :release: 3.1.1
 == `{release}`
-include::partial$changelog-release-section-old.adoc[]
+include::partial$changelog-release-section.adoc[]
 include::partial$changelog-{release}.adoc[]
 
 :release: 3.0.0
 == `{release}`
-include::partial$changelog-release-section-old.adoc[]
+include::partial$changelog-release-section.adoc[]
 include::partial$changelog-{release}.adoc[]
 
 :release: 2.0.0
 == `{release}`
-include::partial$changelog-release-section-old.adoc[]
+include::partial$changelog-release-section.adoc[]
 include::partial$changelog-{release}.adoc[]
 
 :release: 1.1.0
 == `{release}`
-include::partial$changelog-release-section-old.adoc[]
+include::partial$changelog-release-section.adoc[]
 include::partial$changelog-{release}.adoc[]
 
 :release: 1.0.0
 == `{release}`
-include::partial$changelog-release-section-old.adoc[]
+include::partial$changelog-release-section.adoc[]
 include::partial$changelog-{release}.adoc[]
