@@ -128,7 +128,7 @@ jobs:
 
           # Zip all NuGet packages
           cd artifacts
-          zip -r -9 ../release-artifacts/PPWCode.Vernacular.Quartz.IV-nuget-pkgs_${{ steps.get_version.outputs.version }}.zip *.nupkg
+          zip -r -9 ../release-artifacts/PPWCode.Vernacular.Quartz.I-nuget-pkgs_${{ steps.get_version.outputs.version }}.zip *.nupkg
 
       - name: Upload reproduced release artifacts
         uses: actions/upload-artifact@v4
