@@ -26,4 +26,5 @@ This file is translated into markdown and used for the release notes in the GitH
 ** ResetTriggerFromErrorState was added to IScheduler (see https://github.com/quartznet/quartznet/blob/main/changelog.md#release-360-jan-29-2023)
 ** the signature of SchedulerRepository.Instance.Lookup was changed
 * Remove support for .net 6.0
+* Remove `PPWCode.Vernacular.Exceptions.III` reference
 
