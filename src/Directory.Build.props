@@ -123,4 +123,9 @@
     <DefineConstants>TRACE</DefineConstants>
   </PropertyGroup>
 
+  <!-- Show transitive package dependencies (a little bit slower) -->
+  <PropertyGroup>
+    <EmitLegacyAssetsFileItems>True</EmitLegacyAssetsFileItems>
+  </PropertyGroup>
+
 </Project>
