@@ -20,10 +20,8 @@ jobs:
             name-suffix: 'Linux'
           - os: macos-latest
             name-suffix: 'macOS'
-            test-filter: 'Category!=SqlServer'
           - os: windows-2022
             name-suffix: 'Windows'
-            test-filter: 'Category=SqlServer|Category!=SqlServer'
 
     steps:
       - uses: actions/checkout@v4

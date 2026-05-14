@@ -20,10 +20,8 @@ jobs:
             name-suffix: 'Linux'
           - os: macos-latest
             name-suffix: 'macOS'
-            test-filter: 'Category!=SqlServer'
           - os: windows-2022
             name-suffix: 'Windows'
-            test-filter: 'Category=SqlServer|Category!=SqlServer'
 
     steps:
       - uses: actions/checkout@v4
@@ -66,7 +64,6 @@ jobs:
             --logger "trx;LogFilePrefix=test-results" \
             --collect:"XPlat Code Coverage" \
             --results-directory ./coverage \
-            --filter "${{ matrix.test-filter }}" \
             -p:ContinuousIntegrationBuild=true
 
       - name: Publish Test Results
