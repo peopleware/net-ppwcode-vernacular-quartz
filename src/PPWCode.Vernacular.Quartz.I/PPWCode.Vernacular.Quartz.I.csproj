@@ -14,9 +14,6 @@
         <PackageReference Include="Castle.Core"/>
         <PackageReference Include="Common.Logging"/>
 
-        <!-- PPWCode -->
-        <PackageReference Include="PPWCode.Vernacular.Exceptions.III"/>
-
         <!-- System -->
         <PackageReference Include="System.Data.SqlClient"/>
         <PackageReference Include="System.Configuration.ConfigurationManager"/>

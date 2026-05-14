@@ -23,8 +23,6 @@ using Castle.MicroKernel.Registration;
 
 using JetBrains.Annotations;
 
-using PPWCode.Vernacular.Exceptions.III;
-
 using Quartz;
 using Quartz.Impl;
 using Quartz.Spi;
@@ -397,14 +395,14 @@ namespace PPWCode.Vernacular.Quartz.I
         {
             if ((properties == null) || (properties.Count == 0))
             {
-                throw new ProgrammingError(
+                throw new InvalidOperationException(
                     "No properties found to configure a SchedulerFactory, identified by" +
                     $"(service:{serviceType.Name}, component{componentType.Name})!");
             }
 
             if (!properties.AllKeys.Contains(StdSchedulerFactory.PropertySchedulerInstanceName))
             {
-                throw new ProgrammingError(
+                throw new InvalidOperationException(
                     $"Property, identified by {StdSchedulerFactory.PropertySchedulerInstanceName}, " +
                     "not found to configure a SchedulerFactory, identified by" +
                     $"(service:{serviceType.Name}, component{componentType.Name})!");
@@ -417,7 +415,7 @@ namespace PPWCode.Vernacular.Quartz.I
                     .Lookup(schedulerName);
             if (scheduler != null)
             {
-                throw new ProgrammingError(
+                throw new InvalidOperationException(
                     $"A scheduler, identified by {schedulerName}, " +
                     "is already registered in the scheduler-repository." +
                     "While registering a SchedulerFactory, identified by" +
@@ -445,25 +443,25 @@ namespace PPWCode.Vernacular.Quartz.I
                 SchedulerFactoryServiceType = schedulerFactoryServiceType;
                 if (!schedulerFactoryServiceType.Is<IQuartzSchedulerFactory>())
                 {
-                    throw new ProgrammingError($"{nameof(schedulerFactoryServiceType)} should implement {typeof(IQuartzSchedulerFactory).FullName}");
+                    throw new InvalidOperationException($"{nameof(schedulerFactoryServiceType)} should implement {typeof(IQuartzSchedulerFactory).FullName}");
                 }
 
                 SchedulerFactoryComponentType = schedulerFactoryComponentType;
                 if (!schedulerFactoryComponentType.Is<IQuartzSchedulerFactory>())
                 {
-                    throw new ProgrammingError($"{nameof(schedulerFactoryComponentType)} should implement {typeof(IQuartzSchedulerFactory).FullName}");
+                    throw new InvalidOperationException($"{nameof(schedulerFactoryComponentType)} should implement {typeof(IQuartzSchedulerFactory).FullName}");
                 }
 
                 SchedulerServiceType = schedulerServiceType;
                 if (!schedulerServiceType.Is<IQuartzScheduler>())
                 {
-                    throw new ProgrammingError($"{nameof(schedulerServiceType)} should implement {typeof(IQuartzSchedulerFactory).FullName}");
+                    throw new InvalidOperationException($"{nameof(schedulerServiceType)} should implement {typeof(IQuartzSchedulerFactory).FullName}");
                 }
 
                 SchedulerComponentType = schedulerComponentType;
                 if (!schedulerComponentType.Is<IQuartzScheduler>())
                 {
-                    throw new ProgrammingError($"{nameof(schedulerServiceType)} should implement {typeof(IQuartzSchedulerFactory).FullName}");
+                    throw new InvalidOperationException($"{nameof(schedulerServiceType)} should implement {typeof(IQuartzSchedulerFactory).FullName}");
                 }
 
                 WaitForJobsToCompleteAtShutdown = waitForJobsToCompleteAtShutdown;

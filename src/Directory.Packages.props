@@ -15,10 +15,7 @@
   <ItemGroup>
     <!-- jetbrains -->
     <PackageVersion Include="JetBrains.Annotations" Version="2025.2.4" />
-    
-    <!-- ppwcode -->
-    <PackageVersion Include="PPWCode.Vernacular.Exceptions.III" Version="1.*" />
-    
+
     <!-- quartz -->
     <PackageVersion Include="Quartz" Version="3.18.*" />
     <PackageVersion Include="Quartz.Jobs" Version="3.18.*" />
