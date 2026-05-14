@@ -1,0 +1,49 @@
+= Changelog
+
+////
+The changelog is maintained here.
+
+Note that it is best to update the changelog as new code is developed, and that
+the link to the GitHub tag is only added once we are ready to release.
+////
+
+// some helper attributes for the release links
+:github: https://github.com/peopleware/net-ppwcode-vernacular-quartz/releases/tag/I%2F
+:nuget: https://www.nuget.org/packages/PPWCode.Vernacular.Quartz.I/
+:ppwcode-docs: https://peopleware.github.io/net-ppwcode-docs/ppwcode-vernacular-quartz-i/
+:main: PPWCode.Vernacular.Quartz.I
+
+:release: 4.0.0
+== `{release}`
+include::partial$changelog-release-section.adoc[]
+include::partial$changelog-{release}.adoc[]
+
+:release: 3.2.0
+== `{release}`
+include::partial$changelog-release-section.adoc[]
+include::partial$changelog-{release}.adoc[]
+
+:release: 3.1.1
+== `{release}`
+include::partial$changelog-release-section.adoc[]
+include::partial$changelog-{release}.adoc[]
+
+:release: 3.0.0
+== `{release}`
+include::partial$changelog-release-section.adoc[]
+include::partial$changelog-{release}.adoc[]
+
+:release: 2.0.0
+== `{release}`
+include::partial$changelog-release-section.adoc[]
+include::partial$changelog-{release}.adoc[]
+
+:release: 1.1.0
+== `{release}`
+include::partial$changelog-release-section.adoc[]
+include::partial$changelog-{release}.adoc[]
+
+:release: 1.0.0
+== `{release}`
+include::partial$changelog-release-section.adoc[]
+include::partial$changelog-{release}.adoc[]

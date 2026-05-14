@@ -1,0 +1,30 @@
+////
+The changelog for a specific release.
+Note that it is best to update the changelog as new code is developed.
+
+All attributes used, must be included in this file to keep it self-contained.
+
+This file is translated into markdown and used for the release notes in the GitHub release!
+////
+
+=== Changes
+
+* Add support for target frameworks
+** .net full 4.6.2
+** .net full 4.7
+** .net full 4.7.1
+** .net full 4.7.2
+** .net full 4.8
+** .net full 4.8.1
+** .net 8.0
+** .net 9.0
+** .net 10.0
+** .net standard 2.0
+
+=== Breaking
+* Upgrade Quartz to the current latest version 3.16
+** ResetTriggerFromErrorState was added to IScheduler (see https://github.com/quartznet/quartznet/blob/main/changelog.md#release-360-jan-29-2023)
+** the signature of SchedulerRepository.Instance.Lookup was changed
+* Remove support for .net 6.0
+* Remove `PPWCode.Vernacular.Exceptions.III` reference
+

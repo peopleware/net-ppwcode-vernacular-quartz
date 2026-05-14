@@ -23,8 +23,6 @@ using Castle.MicroKernel.Lifestyle.Scoped;
 
 using JetBrains.Annotations;
 
-using PPWCode.Vernacular.Exceptions.III;
-
 using Quartz;
 
 // ReSharper disable UnusedAutoPropertyAccessor.Global
@@ -321,7 +319,7 @@ namespace PPWCode.Vernacular.Quartz.I
         {
             if (_disposed)
             {
-                throw new ObjectAlreadyDisposedError();
+                throw new ObjectDisposedException(GetType().Name);
             }
         }
 

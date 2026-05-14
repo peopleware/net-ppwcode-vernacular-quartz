@@ -1,0 +1,20 @@
+////
+The changelog for a specific release.
+Note that it is best to update the changelog as new code is developed.
+
+All attributes used, must be included in this file to keep it self-contained.
+
+This file is translated into markdown and used for the release notes in the GitHub release!
+////
+
+=== Changes
+* Upgrading dependencies
+* Target
+** net48,
+** net481, 
+** .net 6.0, 
+** .net 8.0
+
+=== Breaking
+* .net core 3.1, 
+* .net 5.0

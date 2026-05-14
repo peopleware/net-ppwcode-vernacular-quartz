@@ -1,0 +1,5 @@
+name: ppwcode-vernacular-quartz-i
+version: ~
+title: PPWCode.Vernacular.Quartz.I
+nav:
+  - modules/ROOT/nav.adoc

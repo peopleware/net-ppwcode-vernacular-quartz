@@ -1,0 +1,88 @@
+<Project>
+  <PropertyGroup>
+    <!-- Enable central package management -->
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <!-- Enforce versions also on transitive dependencies! -->
+    <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
+    <!-- Enable floating versions -->
+    <!-- This is not recommended but we do use package lock files -->
+    <!-- So always review changes to package lock files to prevent pain -->
+    <CentralPackageFloatingVersionsEnabled>true</CentralPackageFloatingVersionsEnabled>
+    <!-- no overrides allowed, should only exceptionally be enabled -->
+    <CentralPackageVersionOverrideEnabled>false</CentralPackageVersionOverrideEnabled>
+  </PropertyGroup>
+  <!-- package versions -->
+  <ItemGroup>
+    <!-- jetbrains -->
+    <PackageVersion Include="JetBrains.Annotations" Version="2025.2.4" />
+
+    <!-- quartz -->
+    <PackageVersion Include="Quartz" Version="3.18.*" />
+    <PackageVersion Include="Quartz.Jobs" Version="3.18.*" />
+    <PackageVersion Include="Quartz.Plugins" Version="3.18.*" />
+    <PackageVersion Include="Quartz.Serialization.Json" Version="3.18.*" />
+    
+    <!-- Castle Windsor  / Common Logging -->
+    <PackageVersion Include="Castle.Windsor" Version="5.1.1" />
+    <PackageVersion Include="Castle.Core" Version="4.4.1" />
+    <PackageVersion Include="Common.Logging" Version="3.4.1" />
+
+    <!-- system -->
+    <PackageVersion Include="System.Data.SqlClient" Version="*" />
+    <PackageVersion Include="System.ComponentModel.Annotations" Version="5.*" />
+
+    <!-- nunit -->
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.*" />
+    <PackageVersion Include="NUnit" Version="4.*" />
+    <PackageVersion Include="NUnit3TestAdapter" Version="6.*" />
+    <PackageVersion Include="JunitXml.TestLogger" Version="8.*" />
+    <PackageVersion Include="coverlet.collector" Version="10.*" />
+    
+    <!-- .net full framework reference assemblies -->
+    <!-- these are explicitly added to avoid issues with cross-platform package lock files -->
+    <!-- https://github.com/NuGet/Home/issues/9195 -->
+    <!-- https://github.com/NuGet/Home/issues/10456 -->
+    <!-- https://github.com/dotnet/sdk/issues/26505 -->
+    <PackageVersion Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" />
+    <PackageVersion Include="Microsoft.NETFramework.ReferenceAssemblies.net462" Version="1.0.3" />
+    <PackageVersion Include="Microsoft.NETFramework.ReferenceAssemblies.net47" Version="1.0.3" />
+    <PackageVersion Include="Microsoft.NETFramework.ReferenceAssemblies.net471" Version="1.0.3" />
+    <PackageVersion Include="Microsoft.NETFramework.ReferenceAssemblies.net472" Version="1.0.3" />
+    <PackageVersion Include="Microsoft.NETFramework.ReferenceAssemblies.net48" Version="1.0.3" />
+    <PackageVersion Include="Microsoft.NETFramework.ReferenceAssemblies.net481" Version="1.0.3" />
+
+    <!-- analyzers -->
+    <PackageVersion Include="NUnit.Analyzers" Version="4.*" />
+  </ItemGroup>
+
+  <!-- microsoft: framework dependent -->
+  <Choose>
+    <When Condition="'$(TargetFramework)' == 'net8.0'">
+      <ItemGroup>
+        <PackageVersion Include="System.Configuration.ConfigurationManager" Version="8.*" />
+      </ItemGroup>
+    </When>
+    <When Condition="'$(TargetFramework)' == 'net9.0'">
+      <ItemGroup>
+        <PackageVersion Include="System.Configuration.ConfigurationManager" Version="9.*" />
+      </ItemGroup>
+    </When>
+    <When Condition="'$(TargetFramework)' == 'net10.0'">
+      <ItemGroup>
+        <PackageVersion Include="System.Configuration.ConfigurationManager" Version="10.*" />
+      </ItemGroup>
+    </When>
+    <Otherwise>
+      <ItemGroup>
+        <PackageVersion Include="System.Configuration.ConfigurationManager" Version="10.*" />
+      </ItemGroup>
+    </Otherwise>
+  </Choose>
+
+  <!-- global package references -->
+  <ItemGroup>
+    <!-- included in each project, using PrivateAssets="All" -->
+    <GlobalPackageVersion Include="StyleCop.Analyzers" Version="1.2.0-beta.556" />
+    <GlobalPackageVersion Include="Microsoft.SourceLink.GitHub" Version="10.*" />
+  </ItemGroup>
+</Project>

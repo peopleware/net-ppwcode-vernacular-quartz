@@ -3,32 +3,41 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "psake", "psake", "{F772B601-DCB1-426D-8EFD-FB124979E86C}"
-ProjectSection(SolutionItems) = preProject
-	init-psake.ps1 = init-psake.ps1
-	psakefile.ps1 = psakefile.ps1
-EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "solution-items", "solution-items", "{8C405651-DF8F-496F-8B17-BA483ECB8653}"
 ProjectSection(SolutionItems) = preProject
 	src\Directory.Build.props = src\Directory.Build.props
-	src\version.props = src\version.props
-EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "style-cop", "style-cop", "{F9BB7F48-94B6-46CB-AF24-C88EDC286EAE}"
-ProjectSection(SolutionItems) = preProject
-	src\StyleCop.ruleset = src\StyleCop.ruleset
-	src\StyleCop-Tests.ruleset = src\StyleCop-Tests.ruleset
+	src\common.props = src\common.props
+	src\common-tests.props = src\common-tests.props
+	global.json = global.json
+	src\Directory.Packages.props = src\Directory.Packages.props
 EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PPWCode.Vernacular.Quartz.I", "src\PPWCode.Vernacular.Quartz.I\PPWCode.Vernacular.Quartz.I.csproj", "{BA858E68-E024-49D8-82EF-2F5425EC172D}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{0B4EBC4D-C071-43CA-9E3B-F7EA18A4B351}"
-ProjectSection(SolutionItems) = preProject
-	LICENSE = LICENSE
-	NOTICE = NOTICE
-	README.md = README.md
-EndProjectSection
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "analysers", "analysers", "{B0C2E0D1-D0A4-4F76-BDAB-ED3669C173F6}"
+	ProjectSection(SolutionItems) = preProject
+		src\Analyzer.ruleset = src\Analyzer.ruleset
+		src\Analyzer-Tests.ruleset = src\Analyzer-Tests.ruleset
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build-pipeline", "build-pipeline", "{538097E9-004B-4D3B-94B8-E4035A5EB14A}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\ci.yml = .github\workflows\ci.yml
+		.github\workflows\publish.yml = .github\workflows\publish.yml
+		.github\workflows\publish-legacy.yml = .github\workflows\publish-legacy.yml
+		.github\workflows\reproduce-build.yml = .github\workflows\reproduce-build.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "package", "package", "{D724D551-5629-42C1-83AB-CA37CC16B563}"
+	ProjectSection(SolutionItems) = preProject
+		LICENSE = LICENSE
+		NOTICE = NOTICE
+		README.md = README.md
+		assets\ppw-logo.png = assets\ppw-logo.png
+		assets\ppw-logo-2.png = assets\ppw-logo-2.png
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PPWCode.Vernacular.Quartz.I.Tests", "src\PPWCode.Vernacular.Quartz.I.Tests\PPWCode.Vernacular.Quartz.I.Tests.csproj", "{AB07CD0B-EEA7-43CB-8EE7-189F36ECA1C7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,5 +64,17 @@ Global
 		{BA858E68-E024-49D8-82EF-2F5425EC172D}.Release|x64.Build.0 = Release|Any CPU
 		{BA858E68-E024-49D8-82EF-2F5425EC172D}.Release|x86.ActiveCfg = Release|Any CPU
 		{BA858E68-E024-49D8-82EF-2F5425EC172D}.Release|x86.Build.0 = Release|Any CPU
+		{AB07CD0B-EEA7-43CB-8EE7-189F36ECA1C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB07CD0B-EEA7-43CB-8EE7-189F36ECA1C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB07CD0B-EEA7-43CB-8EE7-189F36ECA1C7}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{AB07CD0B-EEA7-43CB-8EE7-189F36ECA1C7}.Debug|x64.Build.0 = Debug|Any CPU
+		{AB07CD0B-EEA7-43CB-8EE7-189F36ECA1C7}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{AB07CD0B-EEA7-43CB-8EE7-189F36ECA1C7}.Debug|x86.Build.0 = Debug|Any CPU
+		{AB07CD0B-EEA7-43CB-8EE7-189F36ECA1C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB07CD0B-EEA7-43CB-8EE7-189F36ECA1C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB07CD0B-EEA7-43CB-8EE7-189F36ECA1C7}.Release|x64.ActiveCfg = Release|Any CPU
+		{AB07CD0B-EEA7-43CB-8EE7-189F36ECA1C7}.Release|x64.Build.0 = Release|Any CPU
+		{AB07CD0B-EEA7-43CB-8EE7-189F36ECA1C7}.Release|x86.ActiveCfg = Release|Any CPU
+		{AB07CD0B-EEA7-43CB-8EE7-189F36ECA1C7}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
