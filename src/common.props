@@ -28,5 +28,8 @@
         </Otherwise>
     </Choose>
 
-    <!-- common dependencies included using GlobalPackageReference -->
+    <ItemGroup>
+        <PackageReference Include="JetBrains.Annotations" />
+    </ItemGroup>
+            
 </Project>
