@@ -15,6 +15,6 @@ This file is translated into markdown and used for the release notes in the GitH
 ** .net 6.0, 
 ** .net 8.0
 
-==== Breaking
+=== Breaking
 * .net core 3.1, 
 * .net 5.0
